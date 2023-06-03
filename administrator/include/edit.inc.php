@@ -1,35 +1,27 @@
 <?php
+include 'db.inc.php';
 // Verificăm dacă formularul a fost trimis
-if(isset($_POST['submit'])){
-
-    // Conectarea la baza de date
-    require_once('db.inc.php');
-
-
-    // Verificăm conexiunea la baza de date
-    if ($conn->connect_error) {
-        die("Conexiune esuata: " . $conn->connect_error);
-    }
-
-    // Prelucrarea datelor din formular
-    $id_client = $_POST['id_client'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Preluare și filtrare date din formular
     $nume = $_POST['nume'];
     $prenume = $_POST['prenume'];
+    $adresa = $_POST['adresa'];
     $email = $_POST['email'];
-    $telefon = $_POST['telefon'];
+    $oras = $_POST['oras'];
+    $id_client = $_POST['id_client'];
+    // Validați și actualizați datele în baza de date
+$sql = "UPDATE inregistrare_client SET nume = '$nume', prenume = '$prenume', adresa='$adresa', email=' $email', oras=$oras WHERE id_client = $id_client";
+$result = mysqli_query($conn, $sql);
 
-    // Actualizarea datelor in baza de date
-    $sql = "UPDATE inregistrare_client SET nume='$nume', prenume='$prenume', email='$email', telefon='$telefon' WHERE id_client=$id_client";
+if ($result) {
+    // Datele au fost actualizate cu succes
+    // Redirecționați utilizatorul către o pagină de succes sau afișați un mesaj de confirmare
+    $msg = "Datele clientului au fost modificate cu succes!";
+    header("Location: ../utilizatori.php?msg=".urlencode($msg));
 
-    if ($conn->query($sql) === TRUE) {
-        $msg = "Datele au fost actualizate cu succes!";
-        header("Location: ../utilizatori.php?msg=".urlencode($msg));
-        exit();
-    } else {
-        echo "Eroare: " . $conn->error;
-    }
+  } else {
 
     // Inchidem conexiunea la baza de date
-    $conn->close();
+    $conn->close();}
 }
 ?>
