@@ -30,7 +30,7 @@ if(isset($_GET['msg'])){
                     </div>
 
                     <div class="relative overflow-x-auto">
-                        <table class="w-full text-sm text-left text-gray-500 ">
+                        <table class="w-full text-sm text-center text-gray-500 ">
                             <thead>
                                 <tr>
                                     <th class="text-slate-500 text-sm font-medium px-4 py-2">Id</th>
@@ -39,7 +39,7 @@ if(isset($_GET['msg'])){
                                     <th class="text-slate-500 text-sm font-medium px-4 py-2">Prenume</th>
                                     <th class="text-slate-500 text-sm font-medium px-4 py-2">Data Nastere</th>
                                     <th class="text-slate-500 text-sm font-medium px-4 py-2">Oras</th>
-                                    <th class="text-slate-500 text-sm font-medium px-4 py-2">Ocupatie</th>
+                                    <th class="text-slate-500 text-sm font-medium px-4 py-2">Data deschidere</th>
                                     <th class="text-slate-500 text-sm font-medium px-2 py-2">Editare</th>
                                     <th class="text-slate-500 text-sm font-medium px-2 py-2">Stergere</th>
                                     <!-- adaugam o coloana pentru butoanele de actiune -->
@@ -68,7 +68,13 @@ if(isset($_GET['msg'])){
                                         ?>
                                     </td>
 
-                                    <td class=" px-4 py-2"><?php echo $row['ocupatie']; ?></td>
+                                    <td class="px-4 py-2">
+    <?php
+    $timestamp = $row['data_deschidere']; // Presupunem că valoarea timpului este stocată în coloana 'data'
+    $data = date('Y-m-d', strtotime($timestamp)); // Preluăm doar data din timestamp și o formatare în formatul dorit
+    echo $data;
+    ?>
+</td>
                                     <td class="">
                                         <button data-id="<?php echo $row['id_client']; ?>"
                                             class="border-none showmodal  hover:bg-violet-50 px-3 py-1 rounded text-indigo-500 m-5"
