@@ -119,7 +119,7 @@ if(isset($_GET['msg'])){
         </div>
     </div>
 </div>
-</div>
+
 <script>
 function showAddForm() {
     // Ascunde butonul de adăugare și afișează formularul de adăugare
