@@ -1,3 +1,4 @@
+<?php session_start();?>
 <?php require('partials/header.php') ?>
 <?php require('partials/navbar.php') ?>
 <div class="flex flex-col w-screen h-screen overflow-auto text-gray-700 ">
@@ -29,6 +30,11 @@
                             <!-- modal body -->
                             <div class="p-3">
                                 <div class="flex flex-row items-center">
+
+                                    <input type="hidden" name="id_client" value="<?php echo $_SESSION['id_client']; ?>">
+
+                                </div>
+                                <div class="flex flex-row items-center">
                                     <label for="nume_depozit"
                                         class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 px-2">Nume:
                                     </label>
@@ -37,9 +43,9 @@
                                         placeholder=" " required />
                                 </div>
                                 <div class="flex flex-row items-center">
-                                    <label for="suma_depozit"
+                                    <label for="suma_depusa"
                                         class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 px-2">Suma:</label>
-                                    <input type="text" name="suma_depozit" id="suma_depozit"
+                                    <input type="text" name="suma_depusa" id="suma_depusa"
                                         class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                         placeholder=" " required />
                                 </div>
@@ -64,11 +70,11 @@
                                 </div>
                                 <div class="flex flex-row items-center mt-2">
                                     <label for="data_expirare"
-                                        class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 px-2 ">Data
-                                        expirare:</label>
-                                    <input id="" type="date" name="data_expirare" required>
-
+                                        class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 px-2">
+                                        Data expirare:</label>
+                                    <input id="data_expirare" type="date" name="data_expirare" required>
                                 </div>
+
 
                                 <!-- <div class="flex flex-row items-center">
                                 <label for="perioada_depozit"
@@ -106,7 +112,7 @@
 
     </div>
 </div>
-</div>
+
 <script>
 const modal = document.querySelector('.modal');
 const showmodal = document.querySelector('.showmodal');
@@ -134,6 +140,8 @@ function updateDobanda() {
 
     switch (valoareSelectata) {
         case "1":
+            rataDobanda.value = "0.4";
+            break;
         case "3":
             rataDobanda.value = "0.4";
             break;
@@ -141,11 +149,13 @@ function updateDobanda() {
             rataDobanda.value = "0.6";
             break;
         case "9":
+            rataDobanda.value = "0.6";
+            break;
         case "12":
             rataDobanda.value = "0.8";
             break;
         default:
-            rataDobanda.value = "";
+            rataDobanda.value = "0.4";
     }
 };
 
@@ -153,13 +163,44 @@ function updateDobanda() {
 var dataDepunere = new Date().toISOString().slice(0, 10);
 document.getElementById("data_expirare").value = dataDepunere;
 
-// Actualizează data de expirare în funcție de perioada selectată
+
 function updateDataExpirare() {
     var perioada = document.getElementById("perioada_depozit").value;
     var dataExpirare = new Date(dataDepunere);
-    dataExpirare.setMonth(dataExpirare.getMonth() + parseInt(perioada));
+
+    // Adaugă luni la data de expirare în funcție de perioada selectată
+    switch (perioada) {
+        case "1":
+            dataExpirare.setMonth(dataExpirare.getMonth() + 1);
+            document.getElementById("rata_dobanda").value = "0.4";
+            break;
+        case "3":
+            dataExpirare.setMonth(dataExpirare.getMonth() + 3);
+            document.getElementById("rata_dobanda").value = "0.4";
+            break;
+        case "9":
+            dataExpirare.setMonth(dataExpirare.getMonth() + 9);
+            document.getElementById("rata_dobanda").value = "0.6";
+            break;
+        case "12":
+            dataExpirare.setMonth(dataExpirare.getMonth() + 12);
+            document.getElementById("rata_dobanda").value = "0.8";
+            break;
+        default:
+            // Perioada implicită este de 1 lună
+            dataExpirare.setMonth(dataExpirare.getMonth() + 1);
+            document.getElementById("rata_dobanda").value = "0.4";
+    }
+
     document.getElementById("data_expirare").value = dataExpirare.toISOString().slice(0, 10);
 }
+
+
+// Adaugă evenimentul onchange pe select
+document.getElementById("perioada_depozit").onchange = function() {
+    updateDataExpirare();
+    dataDepunere = document.getElementById("data_expirare").value; // Actualizează dataDepunere cu noua valoare
+};
 
 // Adaugă evenimentul onchange pe select
 document.getElementById("perioada_depozit").onchange = updateDataExpirare;
