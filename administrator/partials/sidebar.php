@@ -92,7 +92,7 @@
                 </a>
             </li>
             <li class="transition-colors duration-300 hover:bg-indigo-100 opacity-100  rounded-lg ">
-                <a href="documente.php"
+                <a href="reclamatii.php"
                     class="selectedItem hover:text-slate-600 flex items-center p-2 text-sm font-normal  dark:text-white group  ">
                     <svg aria-hidden="true"
                         class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 "
@@ -102,7 +102,7 @@
                             d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
                             clip-rule="evenodd"></path>
                     </svg>
-                    <span class="ml-3">Documentation</span>
+                    <span class="ml-3">Reclamatii</span>
                 </a>
             </li>
             <li class="transition-colors duration-300 hover:bg-indigo-100 opacity-100  rounded-lg ">
