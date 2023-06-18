@@ -1,57 +1,44 @@
 <?php
 include_once 'db.inc.php';
-// Verificați dacă a fost trimis formularul de editare
-if (isset($_POST['salveaza'])) {
-    $update_params = array();
 
-    // Iterați prin valorile primite din formular
-    foreach ($_POST as $key => $value) {
-        if ($key !== 'id_pagina') {
-            // Descompuneți cheia pentru a obține numele tabelului și numele coloanei
-            $parts = explode('.', $key);
-            if (count($parts) === 2) {
-                $table_name = $parts[0];
-                $column_name = $parts[1];
-                if (!empty($value)) {
-                    $update_params[] = "$table_name.$column_name = ?";
-                }
-            }
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Verificăm dacă s-a transmis ID-ul pagini_continut prin formular
+    if (isset($_POST["id_pagina"])) {
+        $id_pagina = $_POST["id_pagina"];
+
+        // Preluăm valorile din formular
+        $h1_text = $_POST["h1_text"];
+        $h2_text = $_POST["h2_text"];
+
+        // Tabelele în care se va actualiza
+        $related_tables = ['index_page', 'despreapp_page', 'istoric_page'];
+
+        foreach ($related_tables as $table_name) {
+            // Actualizăm valorile în fiecare tabel asociat
+            $update_query = "UPDATE $table_name SET h1_text = ?, h2_text = ? WHERE id_pagina = ?";
+            $stmt = $conn->prepare($update_query);
+            $stmt->bind_param("sss", $h1_text, $h2_text, $id_pagina);
+            $stmt->execute();
         }
-    }
 
-    // Verificați dacă există date de actualizat
-    if (!empty($update_params)) {
-        $set_clause = implode(', ', $update_params);
-        $update_query = "UPDATE pagini_continut
-                         LEFT JOIN $related_tables[0] ON pagini_continut.id_pagina = $related_tables[0].id_pagina
-                         SET $set_clause
-                         WHERE pagini_continut.id_pagina = ?";
+        // Adăugăm înregistrarea în tabela istoric_editari
+        $data_editare = date("Y-m-d H:i:s");
+        $insert_query = "INSERT INTO istoric_editari_indexpage (id_pagina, h1_text, h2_text, data_editare) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($insert_query);
+        $stmt->bind_param("ssss", $id_pagina, $h1_text, $h2_text, $data_editare);
+        $stmt->execute();
 
-        $stmt_update = $conn->prepare($update_query);
+        if ($stmt) {
+            // Datele au fost actualizate cu succes
+            // Redirecționați utilizatorul către o pagină de succes sau afișați un mesaj de confirmare
+            $msg = "Pagina a fost modificata cu succes!";
+            header("Location: ../content_pagini.php?msg=".urlencode($msg));
 
-        // Construiți șirul de definiție a tipului pentru bind_param
-        $bind_types = str_repeat('s', count($update_params) + 1);
+          } else {
 
-        // Construiți lista de valori pentru bind_param
-        $bind_values = [];
-        foreach ($update_params as $value) {
-            $bind_values[] = $value;
+            // Inchidem conexiunea la baza de date
+            $conn->close();
+          }
         }
-        $bind_values[] = $id_pagina;
-
-        // Legați parametrii și executați interogarea
-        $stmt_update->bind_param($bind_types, ...$bind_values);
-        $stmt_update->execute();
-
-        // Verificați rezultatul actualizării
-        if ($stmt_update->affected_rows > 0) {
-            echo "Datele au fost actualizate cu succes!";
-        } else {
-            echo "Nu s-au putut actualiza datele.";
-        }
-    } else {
-        echo "Nu există date de actualizat!";
-    }
 }
-
 ?>

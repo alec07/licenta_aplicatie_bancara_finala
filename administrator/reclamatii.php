@@ -178,28 +178,28 @@ function sortTable(column, order) {
 }
 
 function adaugaFiltru() {
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        var selectii = [];
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    var selectii = [];
 
-        checkboxes.forEach(function(checkbox) {
-            if (checkbox.checked) {
-                selectii.push(checkbox.value);
-            }
-        });
+    checkboxes.forEach(function(checkbox) {
+        if (checkbox.checked) {
+            selectii.push(checkbox.value);
+        }
+    });
 
-        var randuri = document.querySelectorAll('.tabel-reclamatii tbody tr');
+    var randuri = document.querySelectorAll('.tabel-reclamatii tbody tr');
 
-        randuri.forEach(function(rand) {
-            var celulaSubiect = rand.querySelector('td:nth-child(4)');
-            var subiect = celulaSubiect.textContent || celulaSubiect.innerText;
+    randuri.forEach(function(rand) {
+        var celulaSubiect = rand.querySelector('td:nth-child(4)');
+        var subiect = celulaSubiect.textContent || celulaSubiect.innerText;
 
-            if (selectii.length > 0 && selectii.indexOf(subiect) === -1) {
-                rand.style.display = 'none';
-            } else {
-                rand.style.display = '';
-            }
-        });
-    }
+        if (selectii.length > 0 && selectii.indexOf(subiect) === -1) {
+            rand.style.display = 'none';
+        } else {
+            rand.style.display = '';
+        }
+    });
+}
 </script>
 
 

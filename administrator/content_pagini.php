@@ -21,29 +21,29 @@
                                 <th scope="col" class="px-6 py-2">
                                     EDITARE </th>
                                 <th scope="col" class="px-6 py-2">
-                                    ȘTERGERE </th>
+                                    ISTORIC </th>
                             </tr>
                         </thead>
                         <tbody class="">
-    <?php
-        // selectare date din tabel
-        $sql = "SELECT * FROM pagini_continut";
-        $result = $conn->query($sql);
+                            <?php
+                                // selectare date din tabel
+                                $sql = "SELECT * FROM pagini_continut";
+                                $result = $conn->query($sql);
 
-        // afișare date în tabel
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo "<tr class='bg-white'>";
-                echo "<td class='px-6 py-2'>" . $row["pagini"] . "</td>";
-                echo "<td class='px-6 py-2'><a href='editare_content_pagini.php?id_pagina=" . $row["id_pagina"] . "'>Edit</a></td>";
-                echo "<td class='px-6 py-2'><a href='include/istoric_pagina_content.php?id_pagina=" . $row["id_pagina"] . "'>Istoric</a></td>";
-                echo "</tr>";
-            }
-        } else {
-            echo "<tr><td colspan='4'>Nu sunt adaugate pagini</td></tr>";
-        }
-    ?>
-</tbody>
+                                // afișare date în tabel
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        echo "<tr class='bg-white'>";
+                                        echo "<td class='px-6 py-2'>" . $row["pagini"] . "</td>";
+                                        echo "<td class='px-6 py-2'><a href='editare_content_pagini.php?id_pagina=" . $row["id_pagina"] . "'>Edit</a></td>";
+                                        echo "<td class='px-6 py-2'><a href='istoric_pagina_content.php?id_pagina=" . $row["id_pagina"] . "'>Istoric</a></td>";
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='4'>Nu sunt adaugate pagini</td></tr>";
+                                }
+                            ?>
+                        </tbody>
 
                     </table>
                     <div class="mb-6">

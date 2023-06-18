@@ -36,11 +36,8 @@ if(isset($_GET['msg'])){
                 <h2 class="text-4xl">Formular de editare pentru paginile aplicației web</h2>
                 <div class="">
                     <div class="">
-
                     <?php
 include_once 'include/db.inc.php';
-
-$id_pagina = null;
 // Verificați dacă s-a transmis ID-ul pagini_continut prin URL
 if (isset($_GET["id_pagina"])) {
     // Preia ID-ul pagini_continut din tabela "pagini_continut"
@@ -48,117 +45,44 @@ if (isset($_GET["id_pagina"])) {
 }
 
 if ($id_pagina) {
-    // Construiți lista de nume de tabele legate la cheia primară din tabela "pagini_continut"
-    $query = "SELECT GROUP_CONCAT(table_name SEPARATOR ',') AS related_tables
-              FROM information_schema.key_column_usage
-              WHERE referenced_table_name = 'pagini_continut'
-                AND referenced_column_name = 'id_pagina'
-                AND table_schema = DATABASE()";
+    // Tabelele în care se va căuta și se va actualiza
+    $related_tables = ['index_page', 'despreapp_page', 'istoric_page'];
 
-    $result = $conn->query($query);
-    $row = $result->fetch_assoc();
+    echo "<form method='POST' action='include/editare_pagini_continut.php'>";
 
-    if ($row) {
-        // Obțineți lista de nume de tabele separate
-        $related_tables = explode(',', $row['related_tables']);
+    foreach ($related_tables as $table_name) {
+        $select_query = "SELECT h1_text, h2_text FROM $table_name WHERE id_pagina = ?";
+        $stmt = $conn->prepare($select_query);
+        $stmt->bind_param("s", $id_pagina);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        // Remove "istoric_editari_indexpage" from the related tables
-        $related_tables = array_diff($related_tables, ['istoric_editari_indexpage']);
+        // Verificați dacă există înregistrări în rezultat
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
 
-        // Construiți partea de SELECT și JOIN pentru fiecare tabel legat
-        $select_queries = [];
-        $join_queries = [];
-        $bind_types = '';
-        $bind_params = [$id_pagina];
+            echo "<label for='h1_text'>H1 Text:</label>";
+            echo "<input type='text' name='h1_text' value='".$row['h1_text']."' class='border border-gray-300 rounded p-2 mb-2 w-full'><br><br>";
 
-        foreach ($related_tables as $table_name) {
-            $select_queries[] = "$table_name.*";
-            $join_queries[] = "LEFT JOIN $table_name ON pagini_continut.id_pagina = $table_name.id_pagina";
-            $bind_types .= 's';
-        }
-
-        $select_query = implode(', ', $select_queries);
-        $join_query = implode(' ', $join_queries);
-
-        $final_query = "SELECT $select_query
-                        FROM pagini_continut
-                        $join_query
-                        WHERE pagini_continut.id_pagina = ?";
-
-        // Preparați și executați interogarea pentru a obține rezultatul
-$stmt = $conn->prepare($final_query);
-$stmt->bind_param("s", $id_pagina);
-$stmt->execute();
-$result = $stmt->get_result();
-$row = $result->fetch_assoc();
-
-if ($row) {
-    // Obțineți numele tabelelor asociate
-    $related_tables = [];
-    $columns = $result->fetch_fields();
-    foreach ($columns as $column) {
-        if ($column->table != 'pagini_continut') {
-            $related_tables[] = $column->table;
+            echo "<label for='h2_text'>H2 Text:</label>";
+            echo "<textarea name='h2_text' class='border border-gray-300 rounded p-2 mb-2 w-full'>".$row['h2_text']."</textarea><br><br>";
         }
     }
 
-            // Afișați formularul de editare cu valorile existente
-            echo "<form action='include/editare_pagini_continut.php' method='POST'>";
-            echo "<input type='hidden' name='id_pagina' value='" . $id_pagina . "'>";
-
-
-// Remove "istoric_editari_indexpage" from the related tables
-$related_tables = array_diff($related_tables, ['istoric_editari_indexpage']);
-
-// Selectați conținutul paginii din fiecare tabel asociat
-$at_least_one_row = false; // Flag pentru a verifica dacă există cel puțin un rând de date
-
-foreach ($related_tables as $table_name) {
-    // Excludem tabela "istoric_editari_indexpage"
-    if ($table_name === 'istoric_editari_indexpage') {
-        continue;
-    }
-
-    $query_select_content = "SELECT *
-                             FROM $table_name
-                             WHERE id_pagina = ?";
-    $stmt_select_content = $conn->prepare($query_select_content);
-    $stmt_select_content->bind_param("s", $id_pagina);
-    $stmt_select_content->execute();
-    $result_select_content = $stmt_select_content->get_result();
-    $row_select_content = $result_select_content->fetch_assoc();
-
-    if ($row_select_content) {
-        // Afișați valorile din tabelul asociat
-        foreach ($row_select_content as $column_name => $value) {
-            // Convertiți numele coloanei într-un format mai citibil
-            $formatted_column_name = str_replace('_', ' ', ucfirst($column_name));
-
-            echo "<label for='$column_name'>$formatted_column_name:</label>";
-            echo "<input type='text' name='$table_name.$column_name' value='$value' class='border border-gray-300 rounded p-2 mb-2 w-full'><br><br>";
-        }
-
-        $at_least_one_row = true; // Există cel puțin un rând de date
-    }
-}
-
-
-// Verificați dacă există cel puțin un rând de date
-if ($at_least_one_row) {
+    echo "<input type='hidden' name='id_pagina' value='$id_pagina'>";
     echo "<button type='submit' name='salveaza' class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Salvează</button>";
-} else {
-    echo "Nu există date de actualizat!";
+    echo "</form>";
 }
-
-        } else {
-            echo "Pagina selectată nu există.";
-        }
-    } else {
-        echo "Nu există tabele legate la cheia primară din tabela 'pagini_continut'.";
-    }
-}
-
 ?>
+
+
+
+
+
+
+
+
+
 
 
 
