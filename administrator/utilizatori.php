@@ -3,102 +3,149 @@
     $sql=" SELECT * FROM inregistrare_client WHERE user_type = 'user' ";
     $result = $conn->query($sql);
 ?>
-
 <?php require('partials/head.php') ?>
 <?php include ('partials/sidebar.php'); ?>
 <?php
-//Verificăm dacă există un mesaj de afișat
-if(isset($_GET['msg'])){
-    $msg = $_GET['msg'];
-    echo "<p>".$msg."</p>";
-}
-?>
-
-<?php
-// Conexiunea la baza de date și interogarea inițială
-
 // Verificăm dacă există cererea POST pentru filtrare
 if (isset($_POST['filtrare'])) {
     $dataInceput = $_POST['dataInceput'];
     $dataSfarsit = $_POST['dataSfarsit'];
 
     // Realizați interogarea bazei de date pentru a filtra în funcție de perioadă
-    $query = "SELECT * FROM inregistrare_client WHERE (data_nastere BETWEEN '$dataInceput' AND '$dataSfarsit') OR (data_deschidere BETWEEN '$dataInceput' AND '$dataSfarsit')";
-    $result = mysqli_query($conn, $query);
+    $query = "SELECT * FROM inregistrare_client WHERE user_type = 'user' AND ((data_nastere BETWEEN ? AND ?) OR (data_deschidere BETWEEN ? AND ?))";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("ssss", $dataInceput, $dataSfarsit, $dataInceput, $dataSfarsit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
 } else {
     // Dacă nu există o cerere de filtrare, afișăm toate înregistrările
-    $query = "SELECT * FROM inregistrare_client";
+    $query = "SELECT * FROM inregistrare_client  WHERE user_type = 'user'";
     $result = mysqli_query($conn, $query);
 }
 ?>
-
-<!-- ... -->
 
 
 <div class="py-4 sm:ml-60">
     <div class=" mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div class="flex min-h-full  px-4 sm:px-6 lg:px-8">
             <div class="w-full ">
-                <div class=" text-sm text-center mb-12 ">
+                <div class=" text-sm  mb-12 ">
                     <h1 class="text-3xl text-slate-800 justify-left flex mb-4">Utilizatori</h1>
-                    <div class="flex justify-between">
-                        <button onclick="deschideDreptunghi()" type="button"
-                            class=" text-slate-600 bg-slate-100  focus:outline-none hover:bg-slate-200 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-xs px-5 py-2  mb-2 ">Adauga
-                            filtru</button>
-                            <button  type="button"
-                            class=" text-slate-600 bg-slate-100  focus:outline-none hover:bg-slate-200 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-xs px-5 py-2  mb-2 "><a href="include/exporta_utilizatori.inc.php"> Exporta</a></button>
+                    <div class="justify-left flex mb-10">
+                        <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                            <input type="text" name="search" placeholder="Caută..."
+                                class="rounded-l-lg px-4 py-2  mr-5 border-b  text-gray-800 border-gray-200 bg-white">
+                            <button type="submit"
+                                class="px-4 rounded-lg bg-gray-200  text-gray-800 font-semibold border border-gray-200">Caută</button>
+                        </form>
                     </div>
+                    <!-- <button type="button" onclick="adaugaFiltru()"
+                        class="text-slate-600 bg-slate-100 focus:outline-none hover:bg-slate-200 font-medium rounded-full text-xs px-5 py-2  mb-2">
+                        Adaugă filtru
+                    </button> -->
 
 
                     <!-- Adăugați formularul pentru filtrare în partea de sus a tabelului -->
+                    <div class="flex justify-between">
+                        <div class="flex items-between mb-2">
+                            <form method="POST" class="mb-4">
 
-                    <form method="POST" class="mb-4">
-                        <div class="flex items-center mb-2">
-                            <label for="dataInceput" class="mr-2">Data început:</label>
-                            <input type="date" id="dataInceput" name="dataInceput"
-                                class="border border-gray-300 rounded px-3 py-2">
-                        </div>
-                        <div class="flex items-center">
-                            <label for="dataSfarsit" class="mr-2">Data sfârșit:</label>
-                            <input type="date" id="dataSfarsit" name="dataSfarsit"
-                                class="border border-gray-300 rounded px-3 py-2">
-                        </div>
-                        <button type="submit" name="filtrare"
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Filtrează</button>
-                    </form>
+                                <label for="dataInceput" class="mr-2">Data început:</label>
+                                <input type="date" id="dataInceput" name="dataInceput"
+                                    class="border border-gray-300 rounded px-3 py-2">
+                                <label for="dataSfarsit" class="mr-2">Data sfârșit:</label>
+                                <input type="date" id="dataSfarsit" name="dataSfarsit"
+                                    class="border border-gray-300 rounded px-3 py-2">
 
+                                <button type="submit" name="filtrare"
+                                    class="text-slate-600 bg-slate-100 focus:outline-none hover:bg-slate-200 font-medium rounded-full text-xs px-5 py-2  mb-2">Filtrează</button>
+                            </form>
+                        </div>
+                        <div>
+                            <button type="button"
+                                class=" text-slate-600 bg-slate-100  focus:outline-none hover:bg-slate-200 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-xs px-5 py-2  mb-2 "><a
+                                    href="include/exporta_utilizatori.inc.php"> Exporta</a></button>
+                        </div>
+                    </div>
                     <!-- Afișați tabelul cu rezultatele filtrate sau toate înregistrările -->
                     <table class="w-full text-sm text-center text-gray-500">
-                        <!-- ... -->
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-2">
+                                    id client
+                                    <button onclick="sortTable(0, 'asc')">▲</button>
+                                    <button onclick="sortTable(0, 'desc')">▼</button>
+                                </th>
+                                <th scope="col" class="px-6 py-2">
+                                    nume client
+
+                                </th>
+                                <th scope="col" class="px-6 py-2">
+                                    initiala tata
+                                </th>
+                                <th scope="col" class="px-6 py-2">
+                                    prenume client
+
+                                </th>
+                                <th scope="col" class="px-6 py-2">
+                                    data nastere
+
+                                </th>
+                                <th scope="col" class="px-6 py-2">
+                                    nume județ
+
+                                </th>
+                                <th scope="col" class="px-6 py-2">
+                                    data deschidere cont
+
+                                </th>
+                                <th scope="col" class="px-6 py-2">
+                                    editare date cont
+
+                                </th>
+                                <th scope="col" class="px-6 py-2">
+                                    stergere cont
+                                </th>
+                            </tr>
+                        </thead>
                         <tbody>
                             <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                // Afișați înregistrările în tabel
-                $id_oras = $row['oras'];
-                // Realizam o interogare suplimentară pentru a obține numele orașului bazat pe ID-ul orașului
-                $query_oras = "SELECT nume_oras FROM orase WHERE id_oras = $id_oras";
-                $result_oras = mysqli_query($conn, $query_oras);
-                $oras = mysqli_fetch_assoc($result_oras)['nume_oras'];
-                ?>
+                            if (isset($_GET['search'])) {
+                                $search = $_GET['search'];
+
+                                // Adăugați condiția de căutare în interogarea inițială
+                                $query .= " AND (nume LIKE '%$search%' OR prenume LIKE '%$search%')";
+                            }
+                            $result = mysqli_query($conn, $query);
+
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    // Afișați înregistrările în tabel
+                                    $id_oras = $row['oras'];
+                                    // Realizam o interogare suplimentară pentru a obține numele orașului bazat pe ID-ul orașului
+                                    $query_oras = "SELECT nume_oras FROM orase WHERE id_oras = $id_oras";
+                                    $result_oras = mysqli_query($conn, $query_oras);
+                                    $oras = mysqli_fetch_assoc($result_oras)['nume_oras'];
+                                    ?>
                             <tr>
-                                <td class=" px-4 py-2"><?php echo $row['id_client']; ?></td>
-                                <td class=" px-4 py-2"><?php echo $row['nume']; ?></td>
-                                <td class=" px-4 py-2"><?php echo $row['initiala_t']; ?></td>
-                                <td class=" px-4 py-2"><?php echo $row['prenume']; ?></td>
-                                <td class=" px-4 py-2"><?php echo $row['data_nastere']; ?></td>
+                                <td class="px-4 py-2"><?php echo $row['id_client']; ?></td>
+                                <td class="px-4 py-2"><?php echo $row['nume']; ?></td>
+                                <td class="px-4 py-2"><?php echo $row['initiala_t']; ?></td>
+                                <td class="px-4 py-2"><?php echo $row['prenume']; ?></td>
+                                <td class="px-4 py-2"><?php echo $row['data_nastere']; ?></td>
                                 <td class="px-4 py-2">
                                     <?php
-                        // Afișați numele orașului în loc de ID
-                        echo $oras;
-                        ?>
+                                // Afișați numele orașului în loc de ID
+                                echo $oras;
+                                ?>
                                 </td>
                                 <td class="px-4 py-2">
-                                    <?php
-                        $timestamp = $row['data_deschidere'];
-                        $data = date('Y-m-d', strtotime($timestamp));
-                        echo $data;
-                        ?>
+                                <?php
+                                        $timestamp = $row['data_deschidere'];
+                                        $data = date('Y-m-d', strtotime($timestamp));
+                                        echo $data;
+                                ?>
                                 </td>
                                 <td class="border-none hover:bg-violet-50 px-3 py-1 rounded text-indigo-500 m-5">
                                     <button>
@@ -106,7 +153,7 @@ if (isset($_POST['filtrare'])) {
                                             href="formular_editare_client.php?id_client=<?php echo $row['id_client']; ?>">Edit</a>
                                     </button>
                                 </td>
-                                <td class="">
+                                <td>
                                     <form method="post" action="include/sterge_client.inc.php">
                                         <input type="hidden" name="id_client" value="<?php echo $row['id_client']; ?>">
                                         <button onclick="return confirm('Sigur doriți să ștergeți acest client?')"
@@ -116,15 +163,80 @@ if (isset($_POST['filtrare'])) {
                                 </td>
                             </tr>
                             <?php
-            }
-        } else {
-            echo "<tr><td colspan='9'>Nu există înregistrări disponibile.</td></tr>";
-        }
-        ?>
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='9'>Nu există înregistrări disponibile.</td></tr>";
+                                }
+                                ?>
+
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<script>
+function sortTable(column, order) {
+    var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.querySelector("table");
+    switching = true;
 
-        <?php require('partials/footer.php') ?>
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+
+        for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+            x = rows[i].getElementsByTagName("TD")[column];
+            y = rows[i + 1].getElementsByTagName("TD")[column];
+
+            var xValue = x.innerHTML.toLowerCase();
+            var yValue = y.innerHTML.toLowerCase();
+
+            if (order === "asc") {
+                if (xValue > yValue) {
+                    shouldSwitch = true;
+                    break;
+                }
+            } else if (order === "desc") {
+                if (xValue < yValue) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+        }
+
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+        }
+    }
+}
+
+
+function adaugaFiltru() {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    var selectii = [];
+
+    checkboxes.forEach(function(checkbox) {
+        if (checkbox.checked) {
+            selectii.push(checkbox.value);
+        }
+    });
+
+    var randuri = document.querySelectorAll('.tabel-reclamatii tbody tr');
+
+    randuri.forEach(function(rand) {
+        var celulaSubiect = rand.querySelector('td:nth-child(4)');
+        var subiect = celulaSubiect.textContent || celulaSubiect.innerText;
+
+        if (selectii.length > 0 && selectii.indexOf(subiect) === -1) {
+            rand.style.display = 'none';
+        } else {
+            rand.style.display = '';
+        }
+    });
+}
+</script>
+<?php require('partials/footer.php') ?>

@@ -69,7 +69,6 @@ if(isset($_GET['msg'])){
 
 
 
-
                                     <input value="<?php echo $row['numar_card']; ?>" type="text" id="numar_card" name="numar_card"
                                     class="pointer-events-none mb-5 border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary w-full rounded-lg border-[1.5px] py-3 px-5 font-medium outline-none transition disabled:cursor-default disabled:bg-[#F5F7FD]" readonly/>
 
