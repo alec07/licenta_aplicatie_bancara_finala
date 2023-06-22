@@ -4,6 +4,8 @@
 <?php require('partials/head.php') ?>
 <?php include ('partials/sidebar.php'); ?>
 
+
+<div class="py-4 sm:ml-60">
 <?php
 // Verificăm dacă există un mesaj de afișat
 if(isset($_GET['msg'])){
@@ -11,40 +13,41 @@ if(isset($_GET['msg'])){
     echo "<p>".$msg."</p>";
 }
 ?>
-<div class="py-4 sm:ml-60">
     <div class=" mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div class="flex min-h-full  px-4 sm:px-6 lg:px-8">
             <div class="w-full ">
                 <div class=" text-sm text-center mb-12 ">
-        <h1 class="text-3xl text-slate-800 justify-left flex mb-4">PRODUSE</h1>
-        <div class="flex justify-between">
-            <button type="button"
-                class=" text-slate-600 bg-slate-100  focus:outline-none hover:bg-slate-200 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-xs px-5 py-2  mb-2 ">Adauga
-                filtru</button>
-            <button type="button"
-                class=" justify-right text-slate-600 bg-slate-100  focus:outline-none hover:bg-slate-200 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-xs px-5 py-2  mb-2 ">Exporta</button>
-        </div>
+                    <h1 class="text-3xl text-slate-800 justify-left flex mb-4">Produsele Bancare acceptate - Pagina de
+                        Administrare</h1>
+                    <?php include ('partials/form_cautare.php'); ?>
+                    <div class="flex justify-between mb-5">
+                        <button type="button"
+                            class=" text-slate-600 bg-slate-100  focus:outline-none hover:bg-slate-200 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-xs px-5 py-2  mb-2 ">Adauga
+                            filtru</button>
+                        <button type="button"
+                            class=" justify-right text-slate-600 bg-slate-100  focus:outline-none hover:bg-slate-200 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-xs px-5 py-2  mb-2 ">Exporta</button>
+                    </div>
 
-        <div class="relative overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-500 ">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-2">
-                                    nume produs
-                                </th>
-                                <th scope="col" class="px-6 py-2">
-                                    id_produs
-                                </th>
-                                <th scope="col" class="px-6 py-2">
-                                    editare
-                                </th>
-                                <th scope="col" class="px-6 py-2">
-                                    stergere
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="">
-                            <?php
+                    <div class="relative overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-500 ">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-2">
+                                        nume produs
+                                    </th>
+                                    <th scope="col" class="px-6 py-2">
+                                        id_produs
+                                    </th>
+                                    <th scope="col" class="px-6 py-2">
+                                        editare
+                                    </th>
+                                    <th scope="col" class="px-6 py-2">
+                                        stergere
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="">
+                                <?php
 
                                 // selectare date din tabel
                                 $sql=" SELECT * FROM produse_bancare  ";
@@ -52,16 +55,16 @@ if(isset($_GET['msg'])){
                                 // afișare date în tabel
                                 if (mysqli_num_rows($result) > 0) {
                                     while($row = mysqli_fetch_assoc($result)) {
-                                        echo "<tr class='bg-white '><td class='px-6 py-2'>" . $row["nume_produs"]  . "</td><td>" . $row["id_produs"]. "</td><td><a href='produse.php?id_produs=" . $row["id_produs"] . "'>Edit</a></td><td><a onclick='return confirm(\"Sigur doriți să ștergeți acest client?\")' href='include/sterge_produs.php?id_produs=" . $row["id_produs"] . "'>Sterge</a></td></tr>";
+                                        echo "<tr class='bg-white '><td class='px-6 py-2'>" . $row["nume_produs"]  . "</td><td>" . $row["id_produs"]. "</td><td><a href='produse.php?id_produs=" . $row["id_produs"] . "'>Edit</a></td><td><a onclick='return confirm(\"Sigur doriți să ștergeți acest client?\")' href='include/sterge_produs.inc.php?id_produs=" . $row["id_produs"] . "'>Sterge</a></td></tr>";
                                     }
                                 } else {
                                     echo "<tr><td colspan='4'>Nu sunt adaugate judete/produse_bancare</td></tr>";
                                 }
                             ?>
-                        </tbody>
-                    </table>
-                    <div class="mb-6">
-                        <?php
+                            </tbody>
+                        </table>
+                        <div class="mb-6">
+                            <?php
                                 include_once 'include/db.inc.php';
                                 // verifică dacă butonul de edit a fost apăsat
                                 if (isset($_POST["edit"])) {
@@ -99,32 +102,32 @@ if(isset($_GET['msg'])){
                                     echo "</form>";
                                 }
                             ?>
-                        <br></br>
+                            <br></br>
 
-                        <!-- Butonul de adăugare -->
-                        <button
-                            class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-normal text-xs py-2 px-6 rounded-full"
-                            onclick="showAddForm()">Adaugă produs</button>
+                            <!-- Butonul de adăugare -->
+                            <button
+                                class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-normal text-xs py-2 px-6 rounded-full"
+                                onclick="showAddForm()">Adaugă produs</button>
 
-                        <!-- Formularul de adăugare utilizator -->
-                        <div id="add-form" class="hidden">
-                            <form action="include/adauga_produs.inc.php" method="POST" class="mt-4">
-                                <label class="block text-gray-500 text-sm">Nume produs:</label>
-                                <input type="text" name="nume_produs" class="border rounded py-2 px-4 mb-2 w-full">
-                                <button type="submit"
-                                    class="hover:bg-emerald-50 text-emerald-400 font-normal py-1 px-1 rounded-xl ">Adaugă</button>
-                            </form>
+                            <!-- Formularul de adăugare produs-->
+                            <div id="add-form" class="hidden">
+                                <form action="include/adauga_produs.inc.php" method="POST" class="mt-4">
+                                    <label class="block text-gray-500 text-sm">Nume produs:</label>
+                                    <input type="text" name="nume_produs" class="border rounded py-2 px-4 mb-2 w-full">
+                                    <button type="submit"
+                                        class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-normal text-xs py-2 px-6 rounded-full">Adaugă</button>
+                                </form>
+                            </div>
+
                         </div>
 
                     </div>
-
+                    <br>
                 </div>
-                <br>
-            </div>
 
+            </div>
         </div>
     </div>
-</div>
 </div>
 <script>
 function showAddForm() {

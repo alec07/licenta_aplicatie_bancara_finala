@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('includes/db.inc.php');
 ?>
 <?php require('partials/header.php') ?>
@@ -27,17 +28,16 @@ include('includes/db.inc.php');
             <div class="text-center">
                 <h2 class="text-4xl">Tranzactie noua</h2>
                 <form action="includes/procesare_formular_transferuri.php" method="POST">
-
                     <div class="mt-10">
-                        <input name="" type="text" placeholder="Beneficiari si conturi proprii"
-                            class=" mb-5 border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary w-full rounded-lg border-[1.5px] py-3 px-5 font-medium outline-none transition disabled:cursor-default disabled:bg-[#F5F7FD]" />
-                        <input type="text" placeholder="Cont Beneficiar" name="id_client_destinatie"
+                        <input  type="text" placeholder="Beneficiari si conturi proprii"  name="nume_beneficiar"
+                            class=" mb-5 border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary w-full rounded-lg border-[1.5px] py-3 px-5 font-medium outline-none transition disabled:cursor-default disabled:bg-[#F5F7FD]" required />
+                        <input type="text" placeholder="Cont Beneficiar" name="iban_beneficiar"
                             class=" mb-5 border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary w-full rounded-lg border-[1.5px] py-3 px-5 font-medium outline-none transition disabled:cursor-default disabled:bg-[#F5F7FD]"
                             required />
                         <input type="number" placeholder="Suma" name="suma_transfer" min="0" step="0.01" required
                             class=" mb-5 border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary w-full rounded-lg border-[1.5px] py-3 px-5 font-medium outline-none transition disabled:cursor-default disabled:bg-[#F5F7FD]" />
                         <input type="text" placeholder="Detalii (obligatoriu)" name="detalii_transfer"
-                            class=" mb-5 border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary w-full rounded-lg border-[1.5px] py-3 px-5 font-medium outline-none transition disabled:cursor-default disabled:bg-[#F5F7FD]" />
+                            class=" mb-5 border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary w-full rounded-lg border-[1.5px] py-3 px-5 font-medium outline-none transition disabled:cursor-default disabled:bg-[#F5F7FD]" required/>
                     </div>
                     <button class="px-8 py-2 rounded-lg bg-violet-500 text-white" type="submit"
                         name="submit">Transfera</button>

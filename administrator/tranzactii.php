@@ -28,14 +28,7 @@ if (isset($_POST['filtrare'])) {
             <div class="w-full ">
                 <div class=" text-sm text-center mb-12 ">
                     <h1 class="text-3xl text-slate-800 justify-left flex mb-4">Tranzactii</h1>
-                    <div class="justify-left flex mb-10">
-                        <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                            <input type="text" name="search" placeholder="Caută..."
-                                class="rounded-l-lg px-4 py-2  mr-5 border-b  text-gray-800 border-gray-200 bg-white">
-                            <button type="submit"
-                                class="px-4 rounded-lg bg-gray-200  text-gray-800 font-semibold border border-gray-200">Caută</button>
-                        </form>
-                    </div>
+                    <?php include ('partials/form_cautare.php'); ?>
                     <!-- Adăugați formularul pentru filtrare în partea de sus a tabelului -->
                     <div class="flex justify-between">
                         <div class="flex items-between mb-2">
@@ -59,22 +52,24 @@ if (isset($_POST['filtrare'])) {
                     </div>
 
                     <div class="relative overflow-x-auto">
-                        <table class="w-full text-sm text-CENTER text-gray-500 ">
-                            <thead class="">
+                    <table class="w-full text-sm text-center text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
+                                    <th scope="col" class="px-6 py-2">
                                         ID
+                                        <button onclick="sortTable(0, 'asc')">▲</button>
+                                    <button onclick="sortTable(0, 'desc')">▼</button>
                                     </th>
-                                    <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
+                                    <th scope="col" class="px-6 py-2">
                                         DE LA
                                     </th>
-                                    <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
+                                    <th scope="col" class="px-6 py-2">
                                         CATRE
                                     </th>
-                                    <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
+                                    <th scope="col" class="px-6 py-2">
                                         SUMA
                                     </th>
-                                    <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
+                                    <th scope="col" class="px-6 py-2">
                                         DATA
                                     </th>
                                 </tr>
@@ -162,14 +157,6 @@ if (isset($_POST['filtrare'])) {
                                 mysqli_close($conn);
                                 ?>
 
-
-
-
-
-
-
-
-
                             </tbody>
                         </table>
                     </div>
@@ -179,6 +166,43 @@ if (isset($_POST['filtrare'])) {
     </div>
 </div>
 
+<script>
+function sortTable(column, order) {
+    var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.querySelector("table");
+    switching = true;
 
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+
+        for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+            x = rows[i].getElementsByTagName("TD")[column];
+            y = rows[i + 1].getElementsByTagName("TD")[column];
+
+            var xValue = x.innerHTML.toLowerCase();
+            var yValue = y.innerHTML.toLowerCase();
+
+            if (order === "asc") {
+                if (xValue > yValue) {
+                    shouldSwitch = true;
+                    break;
+                }
+            } else if (order === "desc") {
+                if (xValue < yValue) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+        }
+
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+        }
+    }
+}
+</script>
 
 <?php require('partials/footer.php') ?>

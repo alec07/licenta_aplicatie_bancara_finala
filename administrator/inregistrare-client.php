@@ -17,7 +17,7 @@
                             <div>
                                 <label class="text-black" for="cnp">CNP</label>
                                 <input name="cnp" id="cnp" type="text"
-                                    class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                    class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" required>
                                 <?php
                                     if(isset($_GET['error']) && $_GET['error']=='emptyCNP'){
                                         ?>
@@ -37,7 +37,7 @@
                                 <label class="text-black" for="nume">Nume</label>
                                 <input name="nume" id="nume" type="text"
                                     class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                                <p class=" text-xs font-light text-gray-500 dark:text-gray-40">Nume familie</p>
+                                <p class=" text-xs font-light text-gray-500 dark:text-gray-40" required>Nume familie</p>
                                 <?php
                                     if(isset($_GET['error']) && $_GET['error']=='emptyNUME'){
                                         ?>
@@ -55,7 +55,7 @@
                                 <label class="text-white" for="initiala_t"> f</label>
                                 <input name="initiala_t" id="initiala_t" type="text"
                                     class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                                <p class=" text-xs font-light text-gray-500 dark:text-gray-40">Initiala tata</p>
+                                <p class=" text-xs font-light text-gray-500 dark:text-gray-40" required>Initiala tata</p>
                                 <?php
                                     if(isset($_GET['error']) && $_GET['error']=='emptyINITIALA_T'){
                                         ?>
@@ -72,7 +72,7 @@
                                 <label class="text-white" for="prenume"> f</label>
                                 <input id="prenume" type="text" name="prenume"
                                     class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                                <p class=" text-xs font-light text-gray-500 dark:text-gray-40">Prenume</p>
+                                <p class=" text-xs font-light text-gray-500 dark:text-gray-40" required>Prenume</p>
                                 <?php
                                     if(isset($_GET['error']) && $_GET['error']=='emptyPRENUME'){
                                         ?>
@@ -92,7 +92,7 @@
                             <div>
                                 <label class="text-black" for="emailAddress">Email Address</label>
                                 <input name="email" id="emailAddress" type="email"
-                                    class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                    class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" required>
                                 <?php
                                     if(isset($_GET['error']) && $_GET['error']=='emptyEMAIL'){
                                         ?>
@@ -113,7 +113,7 @@
                             <div>
                                 <label class="text-black" for="telefon">Telefon</label>
                                 <input name="telefon" id="telefon" type="text"
-                                    class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                    class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" required>
                                 <?php
                                     if(isset($_GET['error']) && $_GET['error']=='emptyTELEFON'){
                                         ?>

@@ -1,21 +1,21 @@
-<?php session_start();?>
+<?php session_start(); ?>
 <?php require('partials/header.php') ?>
 <?php require('partials/navbar.php') ?>
-<div class="flex flex-col w-screen h-screen overflow-auto text-gray-700 ">
-    <h1>user page</h1>
-    <?php require('partials/sidebar.php')?>
+<?php require('partials/sidebar.php')?>
 
+<div class="flex flex-col w-screen h-screen overflow-auto text-gray-700 ">
     <div class="p-4 sm:ml-64">
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-            <div
-                class="bg-gradient-to-tr from-indigo-200 flex flex-col items-center justify-center h-48 mb-4 rounded bg-gray-50">
-                <p class="text-2xl text-slate-600 ">Deschidere Depozit la termen</p>
-                <p class="mt-4 px-16 text-xl text-slate-500 ">Deschide-ti acum online un Depozit la
-                    termen, ca sa te bucuri mai tarziu de banii tai. Depui o suma minima si vezi cum creste in timp. Tu
-                    alegi perioada de timp in care vrei sa economisesti, fie ca e vorba de 1 luna, 12 luni, sau 48 de
-                    luni.</p>
-                <button class="showmodal bg-slate-400 hover:bg-slate-700 px-3 py-1 rounded-xl text-white m-5">Depozit
-                    Nou</button>
+        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg ">
+            <div class=" flex flex-col justify-center h-48 mb-4 rounded bg-indigo-50">
+                <div class="text-center" >
+                    <p class="text-2xl text-slate-600 ">Deschidere Depozit la termen</p>
+                    <p class="mt-4 px-16 text-xl text-slate-500 ">Deschide-ti acum online un Depozit la
+                        termen, ca sa te bucuri mai tarziu de banii tai. Depui o suma si vezi cum creste in timp. Tu
+                        alegi perioada de timp in care vrei sa economisesti, fie ca e vorba de 1 luna, 6 luni, sau 12 de
+                        luni.</p>
+                    <button class="showmodal bg-violet-300 hover:bg-violet-700 px-3 py-1 rounded-xl text-white m-5">Depozit
+                        Nou</button>
+                </div>
                 <form action="includes/procesare_formular_depozit.inc.php" method="POST">
                     <div
                         class="modal h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-50 hidden">

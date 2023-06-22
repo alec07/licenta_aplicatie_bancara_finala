@@ -11,14 +11,14 @@ if (isset($_POST['filtrare'])) {
     $dataInceput = $_POST['dataInceput'];
     $dataSfarsit = $_POST['dataSfarsit'];
 
-    // Realizați interogarea bazei de date pentru a filtra în funcție de perioadă
-    $query = "SELECT * FROM inregistrare_client WHERE user_type = 'user' AND ((data_nastere BETWEEN ? AND ?) OR (data_deschidere BETWEEN ? AND ?))";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssss", $dataInceput, $dataSfarsit, $dataInceput, $dataSfarsit);
-    $stmt->execute();
-    $result = $stmt->get_result();
+  // Realizați interogarea bazei de date pentru a filtra în funcție de perioadă
+$query = "SELECT * FROM inregistrare_client WHERE user_type = 'user' AND ((data_nastere BETWEEN '$dataInceput' AND '$dataSfarsit') OR (data_deschidere BETWEEN '$dataInceput' AND '$dataSfarsit'))";
 
-} else {
+$result = $conn->query($query);
+
+
+}
+else{
     // Dacă nu există o cerere de filtrare, afișăm toate înregistrările
     $query = "SELECT * FROM inregistrare_client  WHERE user_type = 'user'";
     $result = mysqli_query($conn, $query);
@@ -32,20 +32,11 @@ if (isset($_POST['filtrare'])) {
             <div class="w-full ">
                 <div class=" text-sm  mb-12 ">
                     <h1 class="text-3xl text-slate-800 justify-left flex mb-4">Utilizatori</h1>
-                    <div class="justify-left flex mb-10">
-                        <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                            <input type="text" name="search" placeholder="Caută..."
-                                class="rounded-l-lg px-4 py-2  mr-5 border-b  text-gray-800 border-gray-200 bg-white">
-                            <button type="submit"
-                                class="px-4 rounded-lg bg-gray-200  text-gray-800 font-semibold border border-gray-200">Caută</button>
-                        </form>
-                    </div>
+                    <?php include ('partials/form_cautare.php'); ?>
                     <!-- <button type="button" onclick="adaugaFiltru()"
                         class="text-slate-600 bg-slate-100 focus:outline-none hover:bg-slate-200 font-medium rounded-full text-xs px-5 py-2  mb-2">
                         Adaugă filtru
                     </button> -->
-
-
                     <!-- Adăugați formularul pentru filtrare în partea de sus a tabelului -->
                     <div class="flex justify-between">
                         <div class="flex items-between mb-2">
@@ -57,16 +48,18 @@ if (isset($_POST['filtrare'])) {
                                 <label for="dataSfarsit" class="mr-2">Data sfârșit:</label>
                                 <input type="date" id="dataSfarsit" name="dataSfarsit"
                                     class="border border-gray-300 rounded px-3 py-2">
-
                                 <button type="submit" name="filtrare"
                                     class="text-slate-600 bg-slate-100 focus:outline-none hover:bg-slate-200 font-medium rounded-full text-xs px-5 py-2  mb-2">Filtrează</button>
                             </form>
                         </div>
-                        <div>
-                            <button type="button"
-                                class=" text-slate-600 bg-slate-100  focus:outline-none hover:bg-slate-200 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-xs px-5 py-2  mb-2 "><a
-                                    href="include/exporta_utilizatori.inc.php"> Exporta</a></button>
-                        </div>
+                        <form method="POST" action="include/exporta_utilizatori.inc.php">
+                            <div>
+                                <button type="submit" name="export"
+                                    class="justify-right text-slate-600 bg-slate-100 focus:outline-none hover:bg-slate-200 font-medium rounded-full text-xs px-5 py-2 mb-2">
+                                    Exporta
+                                </button>
+                            </div>
+                        </form>
                     </div>
                     <!-- Afișați tabelul cu rezultatele filtrate sau toate înregistrările -->
                     <table class="w-full text-sm text-center text-gray-500">
@@ -141,7 +134,7 @@ if (isset($_POST['filtrare'])) {
                                 ?>
                                 </td>
                                 <td class="px-4 py-2">
-                                <?php
+                                    <?php
                                         $timestamp = $row['data_deschidere'];
                                         $data = date('Y-m-d', strtotime($timestamp));
                                         echo $data;

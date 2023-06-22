@@ -13,22 +13,26 @@ if(isset($_GET['msg'])){
 ?>
 <div class="py-4 sm:ml-60">
     <div class=" mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <div class="flex min-h-full  px-4 sm:px-6 lg:px-8">
+        <div class="flex min-h-full px-4 sm:px-6 lg:px-8">
             <div class="w-full ">
-                <div class=" text-sm text-center mb-12 ">
-                    <h1>ORASE</h1>
+                <div class=" text-sm text-center">
+                <h1 class="text-3xl text-slate-800 justify-left flex mb-4">Lista Județelor - Pagina de Administrare</h1>
+                <?php include ('partials/form_cautare.php'); ?>
                 </div>
 
                 <div class="relative overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500 ">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-6 py-2">
+                            <th scope="col" class="px-6 py-2">
                                     nume oras
+                                    <button onclick="sortTable(0, 'asc')">▲</button>
+                                    <button onclick="sortTable(0, 'desc')">▼</button>
                                 </th>
                                 <th scope="col" class="px-6 py-2">
                                     id_oras
                                 </th>
+
                                 <th scope="col" class="px-6 py-2">
                                     editare
                                 </th>
@@ -103,10 +107,10 @@ if(isset($_GET['msg'])){
                         <!-- Formularul de adăugare utilizator -->
                         <div id="add-form" class="hidden">
                             <form action="include/adauga_oras.inc.php" method="POST" class="mt-4">
-                                <label class="block text-gray-500 text-sm">Nume oras:</label>
-                                <input type="text" name="nume_oras" class=" rounded py-2 px-4 mb-2 w-full">
-                                <button type="submit"
-                                    class="hover:bg-emerald-50 text-emerald-400 font-normal py-1 px-1 rounded-xl ">Adaugă</button>
+                            <label class="block text-gray-500 text-sm">Nume produs:</label>
+                                    <input type="text" name="nume_oras" class="border rounded py-2 px-4 mb-2 w-full">
+                                    <button type="submit"
+                                        class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-normal text-xs py-2 px-6 rounded-full">Adaugă</button>
                             </form>
                         </div>
 
@@ -125,6 +129,43 @@ function showAddForm() {
     // Ascunde butonul de adăugare și afișează formularul de adăugare
     document.getElementById('add-form').classList.remove('hidden');
 }
+function sortTable(column, order) {
+    var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.querySelector("table");
+    switching = true;
+
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+
+        for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+            x = rows[i].getElementsByTagName("TD")[column];
+            y = rows[i + 1].getElementsByTagName("TD")[column];
+
+            var xValue = x.innerHTML.toLowerCase();
+            var yValue = y.innerHTML.toLowerCase();
+
+            if (order === "asc") {
+                if (xValue > yValue) {
+                    shouldSwitch = true;
+                    break;
+                }
+            } else if (order === "desc") {
+                if (xValue < yValue) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+        }
+
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+        }
+    }
+}
+
 </script>
 
 <?php require('partials/footer.php') ?>

@@ -2,74 +2,68 @@
 <?php require('partials/head.php') ?>
 <?php include ('partials/sidebar.php'); ?>
 
-<div class="flex flex-col w-screen h-screen overflow-auto text-gray-700 ">
-    <div class="p-4 sm:ml-64">
-        <div class="w-full max-w-6xl min-h-screen mx-auto bg-white">
-            <div class="mb-5">
-                <h1 class="text-3xl text-slate-800 justify-left flex mb-5">Reclamatii</h1>
-                <div class="mb-10">
-                    <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                        <input type="text" name="search" placeholder="Caută..."
-                            class="rounded-l-lg px-4 py-2  mr-5 border-b  text-gray-800 border-gray-200 bg-white">
-                        <button type="submit"
-                            class="px-4 rounded-lg bg-gray-200  text-gray-800 font-semibold border border-gray-200">Caută</button>
-                    </form>
-                </div>
-                <div class="flex justify-between">
-                    <label for="checkbox1">
-                        <input type="checkbox" id="checkbox1" value="Altele"> Altele
-                    </label>
-                    <label for="checkbox2">
-                        <input type="checkbox" id="checkbox2" value="Tranzactii"> Tranzactii
-                    </label>
-                    <label for="checkbox3">
-                        <input type="checkbox" id="checkbox3" value="Depozite"> Depozite
-                    </label>
-                    <button type="button" onclick="adaugaFiltru()"
-                        class="text-slate-600 bg-slate-100 focus:outline-none hover:bg-slate-200 font-medium rounded-full text-xs px-5 py-2  mb-2">
-                        Adaugă filtru
-                    </button>
-                    <button type="button"
-                        class="justify-right text-slate-600 bg-slate-100 focus:outline-none hover:bg-slate-200 font-medium rounded-full text-xs px-5 py-2  mb-2">
-                        <a href="include/exporta_reclamatii.inc.php">Exporta</a>
-                    </button>
-                </div>
+<div class="py-4 sm:ml-60">
+    <div class=" mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <div class="flex min-h-full  px-4 sm:px-6 lg:px-8">
+            <div class="w-full ">
+                <div class=" text-sm text-center mb-12 ">
+                    <h1 class="text-3xl text-slate-800 justify-left flex mb-5">Reclamatii</h1>
+                    <?php include ('partials/form_cautare.php'); ?>
+                    <div class="flex justify-between">
+                        <label for="checkbox1">
+                            <input type="checkbox" id="checkbox1" value="Altele"> Altele
+                        </label>
+                        <label for="checkbox2">
+                            <input type="checkbox" id="checkbox2" value="Tranzactii"> Tranzactii
+                        </label>
+                        <label for="checkbox3">
+                            <input type="checkbox" id="checkbox3" value="Depozite"> Depozite
+                        </label>
+                        <button type="button" onclick="adaugaFiltru()"
+                            class="text-slate-600 bg-slate-100 focus:outline-none hover:bg-slate-200 font-medium rounded-full text-xs px-5 py-2  mb-2">
+                            Adaugă filtru
+                        </button>
+                        <button type="button"
+                            class="justify-right text-slate-600 bg-slate-100 focus:outline-none hover:bg-slate-200 font-medium rounded-full text-xs px-5 py-2  mb-2">
+                            <a href="include/exporta_reclamatii.inc.php">Exporta</a>
+                        </button>
+                    </div>
 
 
-            </div>
-            <div class="tabel-reclamatii">
-                <table class="w-full text-sm text-left text-gray-500">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
-                                NR. RECLAMATIE
-                                <button onclick="sortTable(0, 'asc')">▲</button>
-                                <button onclick="sortTable(0, 'desc')">▼</button>
-                            </th>
-                            <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
-                                NUME RECLAMANT
-                                <button onclick="sortTable(0, 'asc')">▲</button>
-                                <button onclick="sortTable(0, 'desc')">▼</button>
-                            </th>
-                            <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
-                                NR. TELEFON
-                                <button onclick="sortTable(0, 'asc')">▲</button>
-                                <button onclick="sortTable(0, 'desc')">▼</button>
-                            </th>
-                            <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
-                                SUBIECT
-                                <button onclick="sortTable(0, 'asc')">▲</button>
-                                <button onclick="sortTable(0, 'desc')">▼</button>
-                            </th>
-                            <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
-                                MESAJ
-                                <button onclick="sortTable(0, 'asc')">▲</button>
-                                <button onclick="sortTable(0, 'desc')">▼</button>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+                </div>
+                <div class="tabel-reclamatii">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
+                                    NR. RECLAMATIE
+                                    <button onclick="sortTable(0, 'asc')">▲</button>
+                                    <button onclick="sortTable(0, 'desc')">▼</button>
+                                </th>
+                                <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
+                                    NUME RECLAMANT
+                                    <button onclick="sortTable(0, 'asc')">▲</button>
+                                    <button onclick="sortTable(0, 'desc')">▼</button>
+                                </th>
+                                <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
+                                    NR. TELEFON
+                                    <button onclick="sortTable(0, 'asc')">▲</button>
+                                    <button onclick="sortTable(0, 'desc')">▼</button>
+                                </th>
+                                <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
+                                    SUBIECT
+                                    <button onclick="sortTable(0, 'asc')">▲</button>
+                                    <button onclick="sortTable(0, 'desc')">▼</button>
+                                </th>
+                                <th scope="col" class="text-slate-500 text-sm font-medium px-4 py-2">
+                                    MESAJ
+                                    <button onclick="sortTable(0, 'asc')">▲</button>
+                                    <button onclick="sortTable(0, 'desc')">▼</button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
                                 // Verificăm dacă a fost trimis un termen de căutare
                                 if (isset($_GET['search'])) {
                                     $searchTerm = $_GET['search'];
@@ -135,8 +129,9 @@
                                 mysqli_close($conn);
 
                         ?>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

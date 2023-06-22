@@ -298,11 +298,8 @@ session_start();
                                         $id_client = $_SESSION['id_client'];
 
                                         // Interogarea bazei de date pentru a obține informații despre transferurile efectuate de clientul conectat în sesiune
-                                        $query = "SELECT transferuri.id_transfer, transferuri.id_client_destinatie, transferuri.suma_transfer, transferuri.data_transfer, inregistrare_client.nume
-                                                FROM transferuri
-                                                JOIN conturi ON transferuri.id_client_destinatie = conturi.id_cont
-                                                JOIN inregistrare_client ON conturi.id_client = inregistrare_client.id_client
-                                                WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') AND transferuri.data_transfer >= DATE_SUB(NOW(), INTERVAL 30 DAY)";
+                                        $query = "SELECT transferuri.id_transfer, transferuri.id_client_destinatie, transferuri.suma_transfer, transferuri.data_transfer,transferuri.nume_beneficiar from transferuri
+                                                WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') AND transferuri.data_transfer >= DATE_SUB(NOW(), INTERVAL 10 DAY)";
 
                                         $result = mysqli_query($conn, $query);
 
@@ -315,7 +312,7 @@ session_start();
                                             while ($row = mysqli_fetch_assoc($result)) {
                                                 echo "<tr>";
                                                 echo "<td class='px-6 py-2'>" . $row["id_transfer"] . "</td>";
-                                                echo "<td class='px-6 py-2'>" . $row["nume"] . "</td>";
+                                                echo "<td class='px-6 py-2'>" . $row["nume_beneficiar"] . "</td>";
                                                 echo "<td class='px-6 py-2'>" . $row["suma_transfer"] . "</td>";
                                                 echo "<td class='px-6 py-2'>" . $row["data_transfer"] . "</td>";
                                                 echo "</tr>";

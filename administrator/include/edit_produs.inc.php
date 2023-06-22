@@ -1,14 +1,15 @@
 <?php
+
 // Verificăm dacă formularul a fost trimis
 if(isset($_POST['submit'])){
 
     // Conectarea la baza de date
-    require_once('db.inc.php');
-
+    include 'db.inc.php';
 
     // Verificăm conexiunea la baza de date
-    if ($conn->connect_error) {
-        die("Conexiune esuata: " . $conn->connect_error);
+    if (mysqli_connect_error()) {
+        die("Conectare eșuată: " . mysqli_connect_error());
+
     }
 
     // Prelucrarea datelor din formular
@@ -24,10 +25,10 @@ if(isset($_POST['submit'])){
         header("Location: ../produse.php?msg=".urlencode($msg));
         exit();
     } else {
-        echo "Eroare: " . $conn->error;
+        die("eroare: " . mysqli_connect_error());
     }
-
-    // Inchidem conexiunea la baza de date
-    $conn->close();
 }
+    // Inchidem conexiunea la baza de date
+    mysqli_close($conn);
+
 ?>

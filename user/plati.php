@@ -4,13 +4,7 @@ session_start();
 ?>
 <?php require('partials/header.php') ?>
 <?php require('partials/navbar.php') ?>
-<?php
-// Verificăm dacă există un mesaj de afișat
-if(isset($_GET['msg'])){
-    $msg = $_GET['msg'];
-    echo "<p>".$msg."</p>";
-}
-?>
+
 <div class="flex flex-col w-screen h-screen overflow-auto text-gray-700 ">
 
     <!-- nav -->
@@ -42,7 +36,7 @@ if(isset($_GET['msg'])){
                         viitor.</span>
                 </p>
 
-                <div class="mt-10">
+                <div class="mt-10 text-center">
                     <?php
                             // Cautare nume din baza de date
                             $sql = "SELECT nume FROM facturieri";
@@ -73,11 +67,11 @@ if(isset($_GET['msg'])){
 
                                 // Afisare formular cu date precompletate
                                 echo "<form method='post' action='includes/get_facturieri.php'>";
-                                echo "Nume: <input readonly type='text' name='nume' value='" . $row['nume'] . "'><br>";
-                                echo "Iban: <input readonly type='text' name='iban' value='" . $row['iban'] . "'><br>";
-                                echo "Suma: <input type='text' name='suma_plata'><br>";
-                                echo "Cod Client: <input type='text' name='cod_client'><br>";
-                                echo "<input type='submit' value='Salveaza'>";
+                                echo "<p class='mb-2 text-lg mr-5 text-gray-500 font-bold inline-block'>Nume: </p><input readonly class='mb-2 text-lg mr-5 ' type='text' name='nume' value='" . $row['nume'] . "'><br>";
+                                echo "<p class='mb-2 text-lg mr-5 text-gray-500 font-bold inline-block'>Iban: </p><input readonly class='mb-2 text-lg mr-5 ' type='text' name='iban' value='" . $row['iban'] . "'><br>";
+                                echo "<p class='mb-2 text-lg mr-5 text-gray-500 font-bold inline-block'>Suma: </p><input class='mb-2 text-lg mr-5 ' type='text' name='suma_plata'><br>";
+                                echo "<p class='mb-2 text-lg mr-5 text-gray-500 font-bold inline-block'>Cod Client: </p><input class='mb-2 text-lg mr-5 ' type='text' name='cod_client'><br>";
+                                echo "<input type='submit' class='mt-10 px-8 py-2 rounded-lg bg-violet-500 text-white' value='Salveaza'>";
                                 echo "</form>";
                             } else {
                                 // Afisare lista cu numele
@@ -86,7 +80,8 @@ if(isset($_GET['msg'])){
                                 echo "<option   value=''>-- Selecteaza un nume --</option>";
                                 echo $options;
                                 echo "</select>";
-                                echo "<input type='submit' value='Afiseaza'>";
+                                echo " <a href=''><button type='submit' value='Afiseaza' class='mt-10 px-8 py-2 rounded-lg bg-violet-500 text-white'
+                                >Afiseaza</button></a> ";
                                 echo "</form>";
                             }
 
@@ -94,14 +89,9 @@ if(isset($_GET['msg'])){
                             mysqli_close($conn);
                         ?>
 
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                        <path
-                            d="M11 5a3 3 0 11-6 0 3 3 0 016 0zM2.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 018 18a9.953 9.953 0 01-5.385-1.572zM16.25 5.75a.75.75 0 00-1.5 0v2h-2a.75.75 0 000 1.5h2v2a.75.75 0 001.5 0v-2h2a.75.75 0 000-1.5h-2v-2z" />
-                    </svg>
 
                 </div>
-                <a href=""><button class="mt-10 px-8 py-2 rounded-lg bg-violet-500 text-white"
-                        type="">Plateste</button></a>
+
 
             </div>
         </div>

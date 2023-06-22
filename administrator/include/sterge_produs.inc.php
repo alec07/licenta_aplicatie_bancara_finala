@@ -1,20 +1,25 @@
 <?php
-    include('db.inc.php');
-    if(isset($_POST['delete'])){
-    $id_produs=$_POST['id_produs'];
+include "db.inc.php";
 
-    $query="DELETE FROM produse_bancare where id_produs='$id_produs'";
-    $query_run=mysqli_query($conn,$query);
+if (isset($_GET["id_produs"])) {
+    $id_produs = $_GET["id_produs"];
 
-    if($query_run){
+    // SQL pentru a șterge înregistrarea cu id_produs-ul dat
+    $sql = "DELETE FROM produse_bancare WHERE id_produs = ?";
 
-        $msg = "produsul a fost șters cu succes!";
-        header("Location: ../produse.php?msg=".urlencode($msg));
+    // Prepare statement
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_produs);
 
-    }else{
-        $msg = "produsul nu a fost șters cu succes!";
-        header("Location: ../produse.php?msg=".urlencode($msg));
-
+    if (mysqli_stmt_execute($stmt)) {
+        $msg = "Produsul a fost șters cu succes!";
+        header("Location: ../produse.php?msg=" . urlencode($msg));
+        exit();
+    } else {
+        echo "Eroare la ștergerea înregistrării: " . mysqli_error($conn);
+    }
+    mysqli_stmt_close($stmt);
 }
-}
 
+mysqli_close($conn);
+?>
