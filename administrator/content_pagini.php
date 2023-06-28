@@ -7,7 +7,7 @@
     <div class=" mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div class="flex min-h-full  px-4 sm:px-6 lg:px-8">
             <div class="w-full ">
-                <div class=" text-sm text-center mb-12 ">
+                <div class=" text-3xl text-center mb-12 ">
                     <h1>ADMINISTRAREA CONȚINUTULUI PAGINILOR WEB</h1>
                 </div>
 
@@ -48,22 +48,7 @@
                     </table>
                     <div class="mb-6">
 
-                        <br></br>
 
-                        <!-- Butonul de adăugare -->
-                        <button
-                            class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-normal text-xs py-2 px-6 rounded-full"
-                            onclick="showAddForm()">Adaugă pagina</button>
-
-                        <!-- Formularul de adăugare utilizator -->
-                        <div id="add-form" class="hidden">
-                            <form action="include/adauga_pagina.inc.php" method="POST" class="mt-4">
-                                <label class="block text-gray-500 text-sm">Nume pagina:</label>
-                                <input type="text" name="nume_pagina" class=" rounded py-2 px-4 mb-2 w-full">
-                                <button type="submit"
-                                    class="hover:bg-emerald-50 text-emerald-400 font-normal py-1 px-1 rounded-xl ">Adaugă</button>
-                            </form>
-                        </div>
 
                     </div>
 

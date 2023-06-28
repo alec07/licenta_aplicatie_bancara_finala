@@ -65,7 +65,8 @@ if ($id_pagina) {
             echo "<input type='text' name='h1_text' value='".$row['h1_text']."' class='border border-gray-300 rounded p-2 mb-2 w-full'><br><br>";
 
             echo "<label for='h2_text'>H2 Text:</label>";
-            echo "<textarea name='h2_text' class='border border-gray-300 rounded p-2 mb-2 w-full'>".$row['h2_text']."</textarea><br><br>";
+echo "<textarea name='h2_text' class='border border-gray-300 rounded p-2 mb-2 w-full'>".$row['h2_text']."</textarea><br><br>";
+
         }
     }
 
@@ -74,17 +75,6 @@ if ($id_pagina) {
     echo "</form>";
 }
 ?>
-
-
-
-
-
-
-
-
-
-
-
 
                     </div>
                 </div>

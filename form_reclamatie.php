@@ -10,12 +10,12 @@
 
     <!-- conținutul paginii -->
     <div class="mt-5 mb-5 font-serif">
-        <h1 class="text-orange-200 font-serif text-4xl mb-10 text-left">Fă o plângere</h1>
+        <h1 class="text-orange-200 font-serif text-4xl mb-10 text-left">Fă o reclamație</h1>
         <form action="includes/procesare_formular_reclamatie.php" method="post">
             <div class="mb-2">
                 <!-- Câmpul de intrare (input) -->
                 <input name="subiect_reclamatie" id="inputField" class="border-b border-gray-300 bg-orange-50 "
-                    placeholder="Subiectul reclamației" onclick="toggleDropdown()">
+                    placeholder="Subiectul reclamației" onclick="toggleDropdown()" required>
                 <!-- Meniul dropdown -->
                 <ul id="dropdown" class="absolute hidden bg-white text-gray-800 p-2 mt-2 rounded-md">
                     <!-- Elementele meniului -->
@@ -25,16 +25,16 @@
                 </ul>
             </div>
             <div class="mb-2">
-                <input name="nume_reclamant" type="text" class="border-b border-gray-300 bg-orange-50" placeholder="Nume">
+                <input name="nume_reclamant" type="text" class="border-b border-gray-300 bg-orange-50" placeholder="Nume" required>
             </div>
             <div class="mb-2">
-                <input name="prenume_reclamant" type="text" class="border-b border-gray-300 bg-orange-50" placeholder="Prenume">
+                <input name="prenume_reclamant" type="text" class="border-b border-gray-300 bg-orange-50" placeholder="Prenume" required>
             </div>
             <div class="mb-2">
-                <input name="nr_telefon" type="text" class="border-b border-gray-300 bg-orange-50" placeholder="Telefon">
+                <input name="nr_telefon" type="text" class="border-b border-gray-300 bg-orange-50" placeholder="Telefon" required>
             </div>
             <div class="mb-2">
-                <textarea name="mesaj_reclamatie" class=" border-b border-gray-300 w-96 h-20 bg-orange-50 rounded-xl " placeholder="Mesaj"></textarea>
+                <textarea name="mesaj_reclamatie" class=" border-b border-gray-300 w-96 h-20 bg-orange-50 rounded-xl " placeholder="Mesaj" required></textarea>
             </div>
             <div class="mt-10">
                 <p class="text-gray-400 text-sm">*Banca prelucrează datele cu caracter personal în scopul care rezultă

@@ -63,72 +63,98 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                                // Verificăm dacă a fost trimis un termen de căutare
-                                if (isset($_GET['search'])) {
-                                    $searchTerm = $_GET['search'];
+                        <?php
+// Verificăm dacă a fost trimis un termen de căutare
+if (isset($_GET['search'])) {
+    $searchTerm = $_GET['search'];
 
-                                    // Interogare SQL pentru a afișa toate transferurile și numele clienților implicați
-                                    $sql = "SELECT * FROM formular_reclamatii WHERE (nume_reclamant LIKE '%$searchTerm%' OR prenume_reclamant LIKE '%$searchTerm%' OR subiect_reclamatie LIKE '%$searchTerm%' OR mesaj_reclamatie LIKE '%$searchTerm%')";
+    // Interogare SQL inițială pentru a afișa toate reclamațiile
+    $sql = "SELECT * FROM formular_reclamatii";
 
-                                    // Adăugați filtrul pentru subiectul reclamației
-                                    if (!empty($_GET['checkbox'])) {
-                                        $checkboxValues = implode("','", $_GET['checkbox']);
-                                        $sql .= " AND subiect_reclamatie IN ('$checkboxValues')";
-                                    }
+    // Verificăm dacă a fost selectat un filtru
+    $selectedCheckboxes = $_GET['checkbox'] ?? array();
+    if (!empty($selectedCheckboxes)) {
+        $checkboxValues = implode("','", $selectedCheckboxes);
+        $filterSql = "subiect_reclamatie IN ('$checkboxValues')";
+        $sql .= " WHERE $filterSql";
+    }
 
-                                    $result = mysqli_query($conn, $sql);
+    $result = mysqli_query($conn, $sql);
 
-                                    // Verificare rezultate
-                                    if (mysqli_num_rows($result) > 0) {
-                                        // Afisare tabel cu transferurile și numele clienților implicați
-                                        while($row = mysqli_fetch_assoc($result)) {
-                                            echo "
-                                                <tr>
-                                                    <td class='px-4 py-2'>" . $row["id"] . "</td>
-                                                    <td class='px-4 py-2'>" . $row["nume_reclamant"] ." ".$row["prenume_reclamant"] . "</td>
-                                                    <td class='px-4 py-2'>" . $row["nr_telefon"] ." </td>
-                                                    <td class='px-4 py-2'>" . $row["subiect_reclamatie"] . "</td>
-                                                    <td class='px-4 py-2'>" . $row["mesaj_reclamatie"] . "</td>
-                                                </tr>";
-                                        }
-                                    } else {
-                                        echo "Nu s-au găsit rezultate.";
-                                    }
-                                } else {
-                                    // Interogare SQL pentru a afișa toate transferurile și numele clienților implicați
-                                    $sql = "SELECT * FROM formular_reclamatii";
+    // Verificare rezultate
+    if (mysqli_num_rows($result) > 0) {
+        // Cream un array pentru a stoca doar rezultatele filtrate
+        $filteredResults = array();
 
-                                    // Adăugați filtrul pentru subiectul reclamației
-                                    if (!empty($_GET['checkbox'])) {
-                                        $checkboxValues = implode("','", $_GET['checkbox']);
-                                        $sql .= " WHERE subiect_reclamatie IN ('$checkboxValues')";
-                                    }
+        // Filtrăm rezultatele pe baza subiectului reclamației
+        while ($row = mysqli_fetch_assoc($result)) {
+            if (stripos($row["subiect_reclamatie"], $searchTerm) !== false || stripos($row["nume_reclamant"], $searchTerm) !== false || stripos($row["prenume_reclamant"], $searchTerm) !== false || stripos($row["mesaj_reclamatie"], $searchTerm) !== false) {
+                $filteredResults[] = $row;
+            }
+        }
 
-                                    $result = mysqli_query($conn, $sql);
+        // Verificăm dacă există rezultate filtrate
+        if (!empty($filteredResults)) {
+            // Afisare tabel cu reclamațiile filtrate și căutate
+            foreach ($filteredResults as $row) {
+                echo "
+                    <tr>
+                        <td class='px-4 py-2'>" . $row["id"] . "</td>
+                        <td class='px-4 py-2'>" . $row["nume_reclamant"] ." ".$row["prenume_reclamant"] . "</td>
+                        <td class='px-4 py-2'>" . $row["nr_telefon"] ." </td>
+                        <td class='px-4 py-2'>" . $row["subiect_reclamatie"] . "</td>
+                        <td class='px-4 py-2'>" . $row["mesaj_reclamatie"] . "</td>
+                    </tr>";
+            }
+        } else {
+            echo "Nu s-au găsit rezultate pentru termenul de căutare și filtrul selectat.";
+        }
+    } else {
+        echo "Nu s-au găsit rezultate pentru filtrul selectat.";
+    }
+} else {
+    // Verificăm dacă a fost selectat un filtru
+    $selectedCheckboxes = $_GET['checkbox'] ?? array();
+    if (!empty($selectedCheckboxes)) {
+        $checkboxValues = implode("','", $selectedCheckboxes);
+        $filterSql = "subiect_reclamatie IN ('$checkboxValues')";
+        $sql .= " WHERE $filterSql";
+    } else {
+        $sql = "SELECT * FROM formular_reclamatii";
+    }
 
-                                    // Verificare rezultate
-                                    if (mysqli_num_rows($result) > 0) {
-                                        // Afisare tabel cu transferurile și numele clienților implicați
-                                        while($row = mysqli_fetch_assoc($result)) {
-                                            echo "
-                                                <tr>
-                                                    <td class='px-4 py-2'>" . $row["id"] . "</td>
-                                                    <td class='px-4 py-2'>" . $row["nume_reclamant"] ." ".$row["prenume_reclamant"] . "</td>
-                                                    <td class='px-4 py-2'>" . $row["nr_telefon"] ." </td>
-                                                    <td class='px-4 py-2'>" . $row["subiect_reclamatie"] . "</td>
-                                                    <td class='px-4 py-2'>" . $row["mesaj_reclamatie"] . "</td>
-                                                </tr>";
-                                        }
-                                    } else {
-                                        echo "Nu s-au găsit rezultate.";
-                                    }
-                                }
+    $result = mysqli_query($conn, $sql);
 
-                                // Închidere conexiune la baza de date
-                                mysqli_close($conn);
+    // Verificare rezultate
+    if (mysqli_num_rows($result) > 0) {
+        // Afisare tabel cu toate reclamațiile
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "
+                <tr>
+                    <td class='px-4 py-2'>" . $row["id"] . "</td>
+                    <td class='px-4 py-2'>" . $row["nume_reclamant"] ." ".$row["prenume_reclamant"] . "</td>
+                    <td class='px-4 py-2'>" . $row["nr_telefon"] ." </td>
+                    <td class='px-4 py-2'>" . $row["subiect_reclamatie"] . "</td>
+                    <td class='px-4 py-2'>" . $row["mesaj_reclamatie"] . "</td>
+                </tr>";
+        }
+    } else {
+        echo "Nu s-au găsit rezultate pentru filtrul selectat.";
+    }
+}
 
-                        ?>
+// Închidere conexiune la baza de date
+mysqli_close($conn);
+?>
+
+
+
+
+
+
+
+
+
                         </tbody>
                     </table>
                 </div>

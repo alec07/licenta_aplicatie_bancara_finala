@@ -1,3 +1,4 @@
+<?php require('includes/db.inc.php'); ?>
 <?php include ('partials/header2.php'); ?>
 <?php include ('partials/navbar2.php'); ?>
 
@@ -14,33 +15,21 @@
     <div class="text-gray-500">
 
         <p class="mb-5">
-            CELOBANK a fost înființată în 2000 în București pentru a deservi comunitățile din și din jurul
-            Bucureștiului. În perioada 2000-2015, strategia băncii a fost consolidarea și extinderea geografică prin
-            fuziuni cu bănci cooperatiste mai mici, în principal în zonele rurale din judetul Ilfov și din județul
-            Giurgiu.
+        <?php
+                // Query pentru a prelua textul din tag-urile H1
+                $sql2 = "SELECT h2_text FROM istoric_page";
+                $result2 = $conn->query($sql2);
+                if ($result2->num_rows > 0) {
+                    // Afisarea textului din tag-urile H2 în div
+                    while ($row = $result2->fetch_assoc()) {
+                        echo '<h2 class="mb-10">' . nl2br(str_replace('\n', '<br><br>', $row["h2_text"])) . '</h2>';
+                    }
+                } else {
+                    echo "Nu există rezultate.";
+                }
+            ?>
         </p>
-        <p class="mb-5">
-            CELOBANK este o instituție financiară de pe piață, care își dorește să facă un pas important în direcția
-            modernizării și satisfacerii nevoilor clienților săi. Cu o experiență vastă de mai mulți ani în domeniul
-            bancar, banca își propune să rămână competitivă și să se adapteze noilor tendințe tehnologice prin
-            dezvoltarea și lansarea unei aplicații de internet banking.
-        </p>
-        <p class="mb-5">
-            În prezent, mediul bancar se confruntă cu o concurență acerbă, iar clienții sunt din ce în ce mai atrași
-            de serviciile bancare online, rapide și accesibile. Aplicațiile de internet banking oferă o serie de
-            avantaje atât clienților, cât și băncii. Acestea permit clienților să-și gestioneze conturile, să facă
-            plăți, să efectueze transferuri și să obțină informații financiare relevante, toate într-un mod sigur și
-            convenabil.
-        </p>
-        <p class="mb-5">
-            Principalele provocări ale băncii sunt:
-        </p>
-        <ul class="list-decimal list-inside mb-20">
-            <li>utilizarea cardurilor bancare și a instrumentelor de debit (cec, cambie și bilet la ordin), care vor
-                stimula relația cu instituțiile nefinanciare, inclusiv împrumuturile acestora;</li>
-            <li>asigurarea accesului băncii la fonduri suplimentare sau activități generatoare de venituri; și</li>
-            <li>alinierea la cerințele reglementărilor europene.</li>
-        </ul>
+
 
 
     </div>

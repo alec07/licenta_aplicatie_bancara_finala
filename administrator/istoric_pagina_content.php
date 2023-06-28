@@ -1,3 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="dialog.css" rel="stylesheet">
+    <script src="jquery-3.6.4.min.js"></script>
+    <script src="path/to/chartjs/dist/chart.umd.js"></script>
+    <script src="cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js"></script>
+    <title>Bank Page</title>
+</head>
+<body >
 <?php
 include_once 'include/db.inc.php';
 
@@ -15,9 +30,9 @@ if (isset($_GET["id_pagina"])) {
 
     // Verificați dacă există înregistrări în rezultat
     if ($result->num_rows > 0) {
-        echo "<h1>Istoric pagină</h1>";
-        echo "<table>";
-        echo "<tr><th>Data Editare</th><th>H1 Text</th><th>H2 Text</th></tr>";
+        echo "<h1 class='text-4xl mb-10'>Istoric pagină</h1>";
+        echo "<table class='w-full text-sm text-left text-gray-500 '>";
+        echo "<thead class='text-xs text-gray-700 uppercase bg-gray-50' ><tr><th scope='col; class='px-6 py-2'>Data Editare</th><th>H1 Text</th><th>H2 Text</th></tr></thead>";
 
         while ($row = $result->fetch_assoc()) {
             $data_editare = $row['data_editare'];
@@ -35,3 +50,5 @@ if (isset($_GET["id_pagina"])) {
     echo "ID-ul pagini_continut lipsește!";
 }
 ?>
+</body>
+</html>

@@ -21,32 +21,6 @@
                     <span class="ml-3">Dashboard</span>
                 </a>
             </li>
-
-            <li  class="transition-colors duration-300 hover:bg-indigo-100 opacity-100  rounded-lg ">
-                <a href="utilizatori.php"
-                    class=" hover:text-slate-600 flex items-center p-2 text-sm font-normal  dark:text-white group  ">
-                    <svg aria-hidden="true"
-                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 "
-                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="flex-1 ml-3 whitespace-nowrap">Utilizatori</span>
-                </a>
-            </li>
-            <li class="transition-colors duration-300 hover:bg-indigo-100 opacity-100  rounded-lg ">
-                <a href="produse.php"
-                    class="hover:text-slate-600 flex items-center p-2 text-sm font-normal  dark:text-white group   ">
-                    <svg aria-hidden="true"
-                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 "
-                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="flex-1 ml-3 whitespace-nowrap">Produse</span>
-                </a>
-            </li>
             <li class="transition-colors duration-300 hover:bg-indigo-100 opacity-100  rounded-lg ">
                 <a href="inregistrare-client.php"
                     class="hover:text-slate-600 flex items-center p-2 text-sm font-normal  dark:text-white group   ">
@@ -61,21 +35,18 @@
                 </a>
             </li>
 
-        </ul>
-        <ul class="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
-            <h3 class="mb-4 font-bold">Rapoarte</h3>
+
             <li class="transition-colors duration-300 hover:bg-indigo-100 opacity-100  rounded-lg ">
-                <a href="tranzactii.php"
-                    class="hover:text-slate-600 flex items-center p-2 text-sm font-normal  dark:text-white group  ">
+                <a href="produse.php"
+                    class="hover:text-slate-600 flex items-center p-2 text-sm font-normal  dark:text-white group   ">
                     <svg aria-hidden="true"
-                        class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900  dark:text-gray-400"
-                        focusable="false" data-prefix="fas" data-icon="gem" role="img"
-                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                        <path fill="currentColor"
-                            d="M378.7 32H133.3L256 182.7L378.7 32zM512 192l-107.4-141.3L289.6 192H512zM107.4 50.67L0 192h222.4L107.4 50.67zM244.3 474.9C247.3 478.2 251.6 480 256 480s8.653-1.828 11.67-5.062L510.6 224H1.365L244.3 474.9z">
-                        </path>
+                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 "
+                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
+                            clip-rule="evenodd"></path>
                     </svg>
-                    <span class="ml-4">Tranzactii</span>
+                    <span class="flex-1 ml-3 whitespace-nowrap">Produse</span>
                 </a>
             </li>
             <li class="transition-colors duration-300 hover:bg-indigo-100 opacity-100  rounded-lg ">
@@ -91,6 +62,38 @@
                     <span class="flex-1 ml-3 whitespace-nowrap">Judete</span>
                 </a>
             </li>
+
+
+        </ul>
+        <ul class="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
+            <h3 class="mb-4 font-bold">Rapoarte</h3>
+            <li  class="transition-colors duration-300 hover:bg-indigo-100 opacity-100  rounded-lg ">
+                <a href="utilizatori.php"
+                    class=" hover:text-slate-600 flex items-center p-2 text-sm font-normal  dark:text-white group  ">
+                    <svg aria-hidden="true"
+                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 "
+                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="flex-1 ml-3 whitespace-nowrap">Utilizatori</span>
+                </a>
+            </li>
+            <li class="transition-colors duration-300 hover:bg-indigo-100 opacity-100  rounded-lg ">
+                <a href="tranzactii.php"
+                    class="hover:text-slate-600 flex items-center p-2 text-sm font-normal  dark:text-white group  ">
+                    <svg aria-hidden="true"
+                        class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900  dark:text-gray-400"
+                        focusable="false" data-prefix="fas" data-icon="gem" role="img"
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor"
+                            d="M378.7 32H133.3L256 182.7L378.7 32zM512 192l-107.4-141.3L289.6 192H512zM107.4 50.67L0 192h222.4L107.4 50.67zM244.3 474.9C247.3 478.2 251.6 480 256 480s8.653-1.828 11.67-5.062L510.6 224H1.365L244.3 474.9z">
+                        </path>
+                    </svg>
+                    <span class="ml-4">Tranzactii</span>
+                </a>
+            </li>
+
             <li class="transition-colors duration-300 hover:bg-indigo-100 opacity-100  rounded-lg ">
                 <a href="reclamatii.php"
                     class="selectedItem hover:text-slate-600 flex items-center p-2 text-sm font-normal  dark:text-white group  ">
@@ -106,18 +109,19 @@
                 </a>
             </li>
             <li class="transition-colors duration-300 hover:bg-indigo-100 opacity-100  rounded-lg ">
-                <a href="include/logout.inc.php"
-                    class="hover:text-slate-600 flex items-center p-2 text-sm font-normal  dark:text-white group  ">
+                <a href="depozite_deschise.php"
+                    class="hover:text-slate-600 flex items-center p-2 text-sm font-normal  dark:text-white group   ">
                     <svg aria-hidden="true"
                         class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 "
                         fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z">
-                        </path>
+                        <path fill-rule="evenodd"
+                            d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
+                            clip-rule="evenodd"></path>
                     </svg>
-                    <span class="ml-3">Logout</span>
+                    <span class="flex-1 ml-3 whitespace-nowrap">Depozite</span>
                 </a>
             </li>
+
 
         </ul>
         <ul class="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
@@ -132,6 +136,19 @@
                             clip-rule="evenodd"></path>
                     </svg>
                      <span class="ml-3">Administrare content pagini</span>
+                </a>
+            </li>
+            <li class="transition-colors duration-300 hover:bg-indigo-100 opacity-100  rounded-lg ">
+                <a href="include/logout.inc.php"
+                    class="hover:text-slate-600 flex items-center p-2 text-sm font-normal  dark:text-white group  ">
+                    <svg aria-hidden="true"
+                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 "
+                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z">
+                        </path>
+                    </svg>
+                    <span class="ml-3">Logout</span>
                 </a>
             </li>
         </ul>

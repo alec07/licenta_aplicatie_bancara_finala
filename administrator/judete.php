@@ -16,15 +16,16 @@ if(isset($_GET['msg'])){
         <div class="flex min-h-full px-4 sm:px-6 lg:px-8">
             <div class="w-full ">
                 <div class=" text-sm text-center">
-                <h1 class="text-3xl text-slate-800 justify-left flex mb-4">Lista Județelor - Pagina de Administrare</h1>
-                <?php include ('partials/form_cautare.php'); ?>
+                    <h1 class="text-3xl text-slate-800 justify-left flex mb-4">Lista Județelor - Pagina de Administrare
+                    </h1>
+                    <?php include ('partials/form_cautare.php'); ?>
                 </div>
 
                 <div class="relative overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500 ">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                             <tr>
-                            <th scope="col" class="px-6 py-2">
+                                <th scope="col" class="px-6 py-2">
                                     nume oras
                                     <button onclick="sortTable(0, 'asc')">▲</button>
                                     <button onclick="sortTable(0, 'desc')">▼</button>
@@ -43,17 +44,35 @@ if(isset($_GET['msg'])){
                         </thead>
                         <tbody class="">
                             <?php
+                                // Verificăm dacă a fost trimis un termen de căutare
+                                if (isset($_GET['search'])) {
+                                    $searchTerm = $_GET['search'];
 
-                                // selectare date din tabel
-                                $sql=" SELECT * FROM orase  ";
-                                $result = $conn->query($sql);
-                                // afișare date în tabel
-                                if (mysqli_num_rows($result) > 0) {
-                                    while($row = mysqli_fetch_assoc($result)) {
-                                        echo "<tr class='bg-white  '><td class='px-6 py-2'>" . $row["nume_oras"]  . "</td><td>" . $row["id_oras"]. "</td><td><a href='judete.php?id_oras=" . $row["id_oras"] . "'>Edit</a></td><td><a onclick='return confirm(\"Sigur doriți să ștergeți acest client?\")' href='include/sterge_orase.php?id_oras=" . $row["id_oras"] . "'>Sterge</a></td></tr>";
+                                    // selectare date din tabel și aplicare căutare
+                                    $sql = "SELECT * FROM orase WHERE nume_oras LIKE '%$searchTerm%'";
+                                    $result = $conn->query($sql);
+
+                                    // afișare date în tabel
+                                    if (mysqli_num_rows($result) > 0) {
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr class='bg-white  '><td class='px-6 py-2'>" . $row["nume_oras"]  . "</td><td>" . $row["id_oras"] . "</td><td><a href='judete.php?id_oras=" . $row["id_oras"] . "'>Edit</a></td><td><a onclick='return confirm(\"Sigur doriți să ștergeți acest client?\")' href='include/sterge_orase.php?id_oras=" . $row["id_oras"] . "'>Sterge</a></td></tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='4'>Nu au fost găsite rezultate pentru căutarea dvs.</td></tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='4'>Nu sunt adaugate judete/orase</td></tr>";
+                                    // selectare toate datele din tabel
+                                    $sql = "SELECT * FROM orase";
+                                    $result = $conn->query($sql);
+
+                                    // afișare date în tabel
+                                    if (mysqli_num_rows($result) > 0) {
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr class='bg-white  '><td class='px-6 py-2'>" . $row["nume_oras"]  . "</td><td>" . $row["id_oras"] . "</td><td><a href='judete.php?id_oras=" . $row["id_oras"] . "'>Edit</a></td><td><a onclick='return confirm(\"Sigur doriți să ștergeți acest client?\")' href='include/sterge_orase.php?id_oras=" . $row["id_oras"] . "'>Sterge</a></td></tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='4'>Nu sunt adăugate județe/orașe</td></tr>";
+                                    }
                                 }
                             ?>
                         </tbody>
@@ -107,10 +126,10 @@ if(isset($_GET['msg'])){
                         <!-- Formularul de adăugare utilizator -->
                         <div id="add-form" class="hidden">
                             <form action="include/adauga_oras.inc.php" method="POST" class="mt-4">
-                            <label class="block text-gray-500 text-sm">Nume produs:</label>
-                                    <input type="text" name="nume_oras" class="border rounded py-2 px-4 mb-2 w-full">
-                                    <button type="submit"
-                                        class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-normal text-xs py-2 px-6 rounded-full">Adaugă</button>
+                                <label class="block text-gray-500 text-sm">Nume produs:</label>
+                                <input type="text" name="nume_oras" class="border rounded py-2 px-4 mb-2 w-full">
+                                <button type="submit"
+                                    class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-normal text-xs py-2 px-6 rounded-full">Adaugă</button>
                             </form>
                         </div>
 
@@ -129,6 +148,7 @@ function showAddForm() {
     // Ascunde butonul de adăugare și afișează formularul de adăugare
     document.getElementById('add-form').classList.remove('hidden');
 }
+
 function sortTable(column, order) {
     var table, rows, switching, i, x, y, shouldSwitch;
     table = document.querySelector("table");
@@ -165,7 +185,6 @@ function sortTable(column, order) {
         }
     }
 }
-
 </script>
 
 <?php require('partials/footer.php') ?>
