@@ -7,14 +7,16 @@
     <div class="p-4 sm:ml-64">
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg ">
             <div class=" flex flex-col justify-center h-48 mb-4 rounded bg-indigo-50">
-                <div class="text-center" >
+                <div class="text-center">
                     <p class="text-2xl text-slate-600 ">Deschidere Depozit la termen</p>
                     <p class="mt-4 px-16 text-xl text-slate-500 ">Deschide-ti acum online un Depozit la
                         termen, ca sa te bucuri mai tarziu de banii tai. Depui o suma si vezi cum creste in timp. Tu
                         alegi perioada de timp in care vrei sa economisesti, fie ca e vorba de 1 luna, 6 luni, sau 12 de
-                        luni.</p>
-                    <button class="showmodal bg-violet-300 hover:bg-violet-700 px-3 py-1 rounded-xl text-white m-5">Depozit
-                        Nou</button>
+                        luni.
+                    </p>
+                    <button class="showmodal bg-violet-300 hover:bg-violet-700 px-3 py-1 rounded-xl text-white m-5">
+                        Depozit Nou
+                    </button>
                 </div>
                 <form action="includes/procesare_formular_depozit.inc.php" method="POST">
                     <div
@@ -109,7 +111,23 @@
                 </form>
             </div>
         </div>
+        <!-- <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg ">
+            <div class=" flex flex-col justify-center h-48 mb-4 rounded bg-indigo-50">
+                <div class="text-center">
+                    <p class="text-2xl text-slate-600 ">Deschidere Cont</p>
+                    <p class="mt-4 px-16 text-xl text-slate-500 ">Îl deschizi pe loc chiar din aplicație. Zero
+                        comisioanela încasări și plăți de la/către orice bancă.</br>Ai tot timpul controlul finanțelor
+                        tale.
+                    </p>
+                    <a href="deschidere_cont.php">
+                        <button class=" bg-violet-300 hover:bg-violet-700 px-3 py-1 rounded-xl text-white m-5">
+                            Vreau cont
+                        </button>
+                    </a>
+                </div>
 
+            </div>
+        </div> -->
     </div>
 </div>
 

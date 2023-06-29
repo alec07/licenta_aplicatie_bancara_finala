@@ -1,7 +1,42 @@
 <?php
-    require_once('include/db.inc.php');
+    require('include/db.inc.php');
     $sql=" SELECT * FROM inregistrare_client WHERE user_type = 'user' ";
     $result = $conn->query($sql);
+?>
+
+
+<?php
+// Interogare pentru numărul de conturi deschise
+$queryConturiDeschise = "SELECT COUNT(*) as numar_conturi_deschise FROM inregistrare_client where user_type='user' ";
+$resultConturiDeschise = $conn->query($queryConturiDeschise);
+$rowConturiDeschise = $resultConturiDeschise->fetch_assoc();
+$conturiDeschise = $rowConturiDeschise['numar_conturi_deschise'];
+
+// Interogare pentru numărul de conturi închise
+$queryConturiInchise = "SELECT COUNT(*) as numar_conturi_inchise FROM conturi_sterse ";
+$resultConturiInchise = $conn->query($queryConturiInchise);
+$rowConturiInchise = $resultConturiInchise->fetch_assoc();
+$conturiInchise = $rowConturiInchise['numar_conturi_inchise'];
+
+// Calcularea procentului de conturi deschise și închise
+$procentConturiDeschise = ($conturiDeschise / ($conturiDeschise + $conturiInchise)) * 100;
+$procentConturiInchise = ($conturiInchise / ($conturiDeschise + $conturiInchise)) * 100;
+?>
+<?php
+
+$query = "SELECT * FROM inregistrare_client  WHERE user_type = 'user'";
+$result2 = mysqli_query($conn, $query);
+$total_utilizatori = mysqli_num_rows($result2);
+$query="SELECT * FROM conturi_sterse";
+$result2 = mysqli_query($conn, $query);
+$total_sterse = mysqli_num_rows($result2);
+// Interogare pentru utilizatorii care au efectuat cel puțin o plată
+$queryPlati = "SELECT COUNT(DISTINCT id_client) as numar_plati FROM plati_facturi";
+$resultPlati = mysqli_query($conn, $queryPlati);
+$rowPlati = mysqli_fetch_assoc($resultPlati);
+$numarPlati = $rowPlati['numar_plati'];
+
+
 ?>
 <?php require('partials/head.php') ?>
 <?php include ('partials/sidebar.php'); ?>
@@ -28,8 +63,31 @@ else{
 
 <div class="py-4 sm:ml-60">
     <div class=" mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <div class="flex min-h-full  px-4 sm:px-6 lg:px-8">
+        <div class="flex min-h-full px-4 sm:px-6 lg:px-8">
             <div class="w-full ">
+                <div class="mb-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-lg font-semibold mb-4">Indicatori cheie</h2>
+                        <div class="flex flex-wrap justify-between items-center">
+                            <div class="flex flex-col items-center">
+                                <h3 class="text-xl font-semibold">Total utilizatori</h3>
+                                <p class="text-gray-600"><?php echo $total_utilizatori; ?></p>
+                            </div>
+
+                            <div class="flex flex-col items-center">
+                                <h3 class="text-xl font-semibold">Conturi inchise</h3>
+                                <p class="text-gray-600"><?php echo $total_sterse; ?></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-md col-span-2">
+                        <h2 class="text-lg font-semibold mb-4">Grafic evoluție utilizatori</h2>
+                        <div class="bg-gray-200 h-60 w-90">
+                            <canvas id="graficUtilizatori"></canvas>
+                        </div>
+                    </div>
+                </div>
                 <div class=" text-sm  mb-12 ">
                     <h1 class="text-3xl text-slate-800 justify-left flex mb-4">Utilizatori</h1>
                     <?php include ('partials/form_cautare.php'); ?>
@@ -147,7 +205,7 @@ else{
                                     </button>
                                 </td>
                                 <td>
-                                    <form method="post" action="include/sterge_client.inc.php">
+                                    <form method="POST" action="include/sterge_client.inc.php">
                                         <input type="hidden" name="id_client" value="<?php echo $row['id_client']; ?>">
                                         <button onclick="return confirm('Sigur doriți să ștergeți acest client?')"
                                             class="hover:bg-red-50 px-3 py-1 rounded text-red-500" name="delete"
@@ -232,4 +290,45 @@ function adaugaFiltru() {
     });
 }
 </script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Datele preluate din PHP
+var conturiDeschise = <?php echo $conturiDeschise; ?>;
+var conturiInchise = <?php echo $conturiInchise; ?>;
+var procentConturiDeschise = <?php echo $procentConturiDeschise; ?>;
+var procentConturiInchise = <?php echo $procentConturiInchise; ?>;
+
+// Creați un nou grafic utilizând Chart.js
+var ctx = document.getElementById('graficUtilizatori').getContext('2d');
+var graficUtilizatori = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Conturi deschise', 'Conturi închise'],
+        datasets: [{
+            data: [procentConturiDeschise, procentConturiInchise],
+            backgroundColor: ['#36A2EB', '#FF6384'],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        cutoutPercentage: 80,
+        legend: {
+            display: false
+        }
+    }
+});
+</script>
+<script>
+function filtrareUtilizatori() {
+    var select = document.getElementById("filtrareUtilizatori");
+    var option = select.options[select.selectedIndex].value;
+
+    // Redirectați utilizatorul către aceeași pagină, dar adăugați parametrul "filter" în URL
+    window.location.href = window.location.pathname + "?filter=" + option;
+}
+</script>
+
 <?php require('partials/footer.php') ?>

@@ -115,9 +115,9 @@
                                 <option value="durata-asc">Durată (ascendent)</option>
                                 <option value="durata-desc">Durată (descendent)</option>
                             </select>
-                        </div>
-                        <button type="submit" name="filter-button"
+                            <button type="submit" name="filter-button"
                             class="px-4 py-2 bg-blue-500 text-white rounded">Filtrează</button>
+                        </div>
                     </div>
                 </div>
                 <div class="mt-5 relative overflow-x-auto">
