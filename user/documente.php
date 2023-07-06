@@ -32,6 +32,7 @@ session_start();
                             ?>
                         </p>
                     </li>
+
                     <!-- se va afisa numai daca exista un depozit deschis -->
                     <?php
                         $query = "SELECT MIN(data_depunere) AS data_primului_depozit FROM depozite WHERE id_client = {$_SESSION['id_client']}";
@@ -45,7 +46,7 @@ session_start();
                         ?>
 
                     <li>
-                        <a class="text-blue-500" href="../documente/depozie_contract.pdf" download>Termeni și condiții depozite</a>
+                        <a class="text-blue-500" href="../documente/depozite_contract.pdf" download>Termeni și condiții depozite</a>
                         <br>
                         <p class="text-gray-500">Data: <?php echo $data_primului_depozit; ?></p>
                     </li>
@@ -54,7 +55,6 @@ session_start();
                         }
                     }
                     ?>
-
 
                     <li>
                         <a class="text-blue-500" href="../documente/contractbanca.pdf" download>Contract banca</a>

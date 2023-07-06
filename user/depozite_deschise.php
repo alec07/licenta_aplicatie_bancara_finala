@@ -30,13 +30,11 @@ session_start();
                                 </thead>
                                 <tbody>
                                     <?php
-
-
                                            $id_client = $_SESSION['id_client']; // ID-ul clientului conectat în sesiune
                                            $query = "SELECT * FROM depozite WHERE id_client = $id_client AND expirat = 0";
                                            $result = mysqli_query($conn, $query);
                                            if (mysqli_num_rows($result) > 0) {
-                                               // Iterați prin rezultate și afișați informațiile despre fiecare depozit
+                                               // trecem prin rezultate, și afișăm informațiile despre fiecare depozit
                                                while ($row = mysqli_fetch_assoc($result)) {
                                                 echo "<tr class='border-b dark:border-neutral-500'>";
                                                    echo "<td class='whitespace-nowrap px-6 py-4 font-medium'>" . $row['nume_depozit'] . "</td>";
@@ -49,13 +47,13 @@ session_start();
                                                     $expirareDate = $row['data_expirare'];
 
                                                     if ($currentDate > $expirareDate) {
-                                                        // Perioada de expirare a trecut, puteți afișa butonul de retragere
+                                                        // Perioada de expirare a trecut, putem afișa butonul de retragere
                                                         echo '<form method="POST" action="includes/procesare_expirare_depozit.php">';
                                                         echo '<input type="hidden" name="id_depozit" value="' . $row['id_depozit'] . '">';
                                                         echo '<button type="submit" name="expira_depozit">retrage</button>';
                                                         echo '</form>';
                                                     } else {
-                                                        // Perioada de expirare nu a trecut, nu afișa butonul de retragere
+                                                        // Perioada de expirare nu a trecut, nu afișăm butonul de retragere
                                                         echo 'Perioada de expirare nu a trecut.';
                                                     }
 
@@ -64,9 +62,6 @@ session_start();
                                            } else {
                                                echo "Nu există depozite deschise pentru acest client.";
                                            }
-
-
-
                                     ?>
                                 </tbody>
                             </table>
@@ -110,7 +105,7 @@ session_start();
                                                 echo "</tr>";
                                                }
                                            } else {
-                                               echo "Nu există depozite deschise pentru acest client.";
+                                               echo "Nu există depozite închise pentru acest client.";
                                            }
 
                                            mysqli_close($conn);

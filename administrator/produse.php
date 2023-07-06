@@ -6,31 +6,24 @@
 
 
 <div class="py-4 sm:ml-60">
-<?php
-// Verificăm dacă există un mesaj de afișat
-if(isset($_GET['msg'])){
-    $msg = $_GET['msg'];
-    echo "<p>".$msg."</p>";
-}
-?>
     <div class=" mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div class="flex min-h-full  px-4 sm:px-6 lg:px-8">
             <div class="w-full ">
-                <div class=" text-sm text-center mb-12 ">
+                <div class=" text-sm  mb-12 ">
+                    <?php
+                        // Verificăm dacă există un mesaj de afișat
+                        if(isset($_GET['msg'])){
+                            $msg = $_GET['msg'];
+                            echo "<p>".$msg."</p>";
+                        }
+                    ?>
                     <h1 class="text-3xl text-slate-800 justify-left flex mb-4">Produsele Bancare acceptate - Pagina de
                         Administrare</h1>
                     <?php include ('partials/form_cautare.php'); ?>
-                    <div class="flex justify-between mb-5">
-                        <button type="button"
-                            class=" text-slate-600 bg-slate-100  focus:outline-none hover:bg-slate-200 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-xs px-5 py-2  mb-2 ">Adauga
-                            filtru</button>
-                        <button type="button"
-                            class=" justify-right text-slate-600 bg-slate-100  focus:outline-none hover:bg-slate-200 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-xs px-5 py-2  mb-2 ">Exporta</button>
-                    </div>
 
                     <div class="relative overflow-x-auto">
-                        <table class="w-full text-sm text-left text-gray-500 ">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <table class="w-full text-sm text-gray-500 ">
+                            <thead class="text-xs text-left text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th scope="col" class="px-6 py-2">
                                         nume produs
@@ -49,17 +42,33 @@ if(isset($_GET['msg'])){
                             <tbody class="">
                                 <?php
 
+                                // Verificăm dacă a fost trimis un termen de căutare
+                                if (isset($_GET['search'])) {
+                                    $searchTerm = $_GET['search'];
                                 // selectare date din tabel
-                                $sql=" SELECT * FROM produse_bancare  ";
+                                $sql=" SELECT * FROM produse_bancare WHERE nume_produs LIKE '%$searchTerm%'";
                                 $result = $conn->query($sql);
                                 // afișare date în tabel
                                 if (mysqli_num_rows($result) > 0) {
                                     while($row = mysqli_fetch_assoc($result)) {
                                         echo "<tr class='bg-white '><td class='px-6 py-2'>" . $row["nume_produs"]  . "</td><td>" . $row["id_produs"]. "</td><td><a href='produse.php?id_produs=" . $row["id_produs"] . "'>Edit</a></td><td><a onclick='return confirm(\"Sigur doriți să ștergeți acest client?\")' href='include/sterge_produs.inc.php?id_produs=" . $row["id_produs"] . "'>Sterge</a></td></tr>";
                                     }
+                                    } else {
+                                        echo "<tr><td colspan='4'>Nu sunt adaugate produse_bancare</td></tr>";
+                                    }
                                 } else {
-                                    echo "<tr><td colspan='4'>Nu sunt adaugate judete/produse_bancare</td></tr>";
-                                }
+                                // selectare date din tabel
+                                $sql=" SELECT * FROM produse_bancare ";
+                                $result = $conn->query($sql);
+                                // afișare date în tabel
+                                if (mysqli_num_rows($result) > 0) {
+                                    while($row = mysqli_fetch_assoc($result)) {
+                                        echo "<tr class='bg-white '><td class='px-6 py-2'>" . $row["nume_produs"]  . "</td><td>" . $row["id_produs"]. "</td><td><a href='produse.php?id_produs=" . $row["id_produs"] . "'>Edit</a></td><td><a onclick='return confirm(\"Sigur doriți să ștergeți acest client?\")' href='include/sterge_produs.inc.php?id_produs=" . $row["id_produs"] . "'>Sterge</a></td></tr>";
+                                    }
+                                    } else {
+                                        echo "<tr><td colspan='4'>Nu sunt adaugate produse_bancare</td></tr>";
+                                    }
+                                    }
                             ?>
                             </tbody>
                         </table>
@@ -93,12 +102,12 @@ if(isset($_GET['msg'])){
                                     $row = mysqli_fetch_assoc($result);
 
                                     // afișare formular pentru editare
-                                    echo "<h2 class='mt-2 text-sm text-slate-500 uppercase'>Editare produs</h2>";
+                                    echo "<h2 class='mt-2 text-sm text-slate-500 uppercase mb-5'>Editare produs</h2>";
                                     echo "<form class='ml-6' method='post'>";
                                     echo "<input type='hidden' name='id_produs' value='" . $row["id_produs"] . "'>";
                                     echo "Nume Produs: <input class='ml-2' type='text' name='nume_produs' value='" . $row["nume_produs"] . "'>";
                                     echo "<br><br>";
-                                    echo "<input class='text-emerald-500' type='submit' name='edit' value='Salveaza'>";
+                                    echo "<input class='text-emerald-500 font-bold uppercase' type='submit' name='edit' value='Salveaza'>";
                                     echo "</form>";
                                 }
                             ?>

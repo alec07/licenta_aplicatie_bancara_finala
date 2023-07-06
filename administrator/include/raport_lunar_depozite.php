@@ -2,7 +2,6 @@
 include 'db.inc.php';
 // Conectați-vă la baza de date sau includeți fișierul de configurare a bazei de date
 
-
 // Executați interogarea și obțineți rezultatele
 if (isset($_POST['generate-monthly-report'])) {
     // Efectuați interogarea pentru a prelua depozitele din baza de date
@@ -60,6 +59,10 @@ $query = "SELECT * FROM depozite WHERE MONTH(data_depunere) = $month AND YEAR(da
 
         // Terminați execuția scriptului
         exit;
+    }else {
+        // Nu există depozite deschise în luna curentă
+        $msg = "Nu există depozite deschise în luna curentă";
+        header("Location: ../depozite_deschise.php?msg=".urlencode($msg));
     }
 }
 

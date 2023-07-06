@@ -114,7 +114,7 @@ if(isset($_POST["submit"])){
         $data_expirare=mysqli_real_escape_string($conn,strip_tags($_POST['data_expirare']));
         $data_deschidere=mysqli_real_escape_string($conn,strip_tags($_POST['data_deschidere']));
         $parola=mysqli_real_escape_string($conn,strip_tags(($_POST['parola'])));
-$parola_criptata=password_hash($parola, PASSWORD_DEFAULT);
+        $parola_criptata=password_hash($parola, PASSWORD_DEFAULT);
 
 
         $sql = "INSERT INTO inregistrare_client (cnp,nume,initiala_t,prenume,email,telefon,adresa,oras,tara,data_nastere,proprietate,ocupatie,gen,suma_depusa,numar_card,cvv,data_expirare,data_deschidere,parola,iban) VALUES('$cnp','$nume','$initiala_t','$prenume','$email','$telefon','$adresa','$orase','$tara','$data_nastere','$proprietate','$ocupatie','$gen','$suma_depusa','$numar_card','$cvv','$data_expirare','$data_deschidere','$parola_criptata','$iban')";

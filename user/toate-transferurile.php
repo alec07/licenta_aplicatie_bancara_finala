@@ -59,7 +59,9 @@ session_start();
                                 Adauga filtru
                             </button>
                         </form>
+
                     </div>
+
                     <button type="submit" name="export" onclick="exportaTransferuri()"
                         class=" ml-auto font-sans font-medium text-sm inline-flex items-center justify-center gap-2  h-9 px-6 rounded-full bg-violet-100 hover:bg-violet-200 text-violet-500 hover:text-violet-600 transition-all duration-300 tw-accessibility ">
                         <svg class="h-4 w-4 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -68,14 +70,48 @@ session_start();
                         </svg>
                         Exporta
                     </button>
+                    <div>
+                        <button id="modalButton"
+                            class="ml-auto font-sans font-medium text-sm inline-flex items-center justify-center gap-2  h-9 px-6 rounded-full bg-violet-100 hover:bg-violet-200 text-violet-500 hover:text-violet-600 transition-all duration-300 tw-accessibility ">
+                            Solicita Extras
+                        </button>
+
+                        <!-- Modal -->
+                        <div id="myModal"
+                            class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
+                            <div class="bg-white p-6 rounded">
+                                <h2>Selectează perioada</h2>
+                                <form action="includes/generare_extras_cont.php" method="POST">
+                                    <label for="dataStart">Data început:</label>
+                                    <input type="date" id="dataStart" name="dataStart">
+                                    <br>
+                                    <label for="dataEnd">Data sfârșit:</label>
+                                    <input type="date" id="dataEnd" name="dataEnd">
+                                    <br>
+                                    <button class="font-sans font-medium text-sm inline-flex items-center justify-center hover:bg-violet-200 gap-2 h-9 px-6 rounded-full bg-violet-100 text-violet-500 hover:text-violet-600 transition-all duration-300 tw-accessibility mt-5 mb-5" name="generateExtras" type="submit">Generează Extras</button>
+                                    </form>
+                                    <button id="closeModalButton"
+                                        class="font-sans font-medium text-sm inline-flex items-center justify-center hover:bg-violet-200 gap-2 h-9 px-6 rounded-full bg-violet-100 text-violet-500 hover:text-violet-600 transition-all duration-300 tw-accessibility">
+                                        Închide
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
-                <label for="checkbox1">
-                    <input type="checkbox" id="checkbox1" value="Cheltuială" onchange="adaugaFiltru()">Cheltuială
-                </label>
-                <label for="checkbox2">
-                    <input type="checkbox" id="checkbox2" value="Venit" onchange="adaugaFiltru()">Venit
-                </label>
+                <div>
+
+                    <label for="checkbox1">
+                        <input type="checkbox" id="checkbox1" value="Cheltuială" onchange="adaugaFiltru()">Cheltuială
+                    </label>
+                    <label for="checkbox2">
+                        <input type="checkbox" id="checkbox2" value="Venit" onchange="adaugaFiltru()">Venit
+                    </label>
+                    <label for="checkbox3">
+                        <input type="checkbox" id="checkbox3" value="plată factură" onchange="adaugaFiltru()">Plată
+                        Factură
+                    </label>
+                </div>
 
                 <div class="absolute top-50 grid w-[660px] bg-white rounded-lg shadow-lg" id="menu"
                     style="display: none">
@@ -111,158 +147,160 @@ session_start();
                                     <tbody>
 
                                         <?php
-// Preluăm ID-ul clientului conectat în sesiune
-$id_client = $_SESSION['id_client'];
+                                            // Preluăm ID-ul clientului conectat în sesiune
+                                            $id_client = $_SESSION['id_client'];
 
-// Construim interogarea de bază
-$query = "SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
-    CASE
-        WHEN transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') THEN 'Cheltuială'
-        ELSE 'Venit'
-    END AS tip_tranzactie,
-    transferuri.suma_transfer, transferuri.data_transfer
-    FROM transferuri
-    WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
-    UNION ALL
-    SELECT plati_facturi.id_plata, facturieri.nume AS nume_beneficiar, plati_facturi.detalii_transfer,
-    'Cheltuială', plati_facturi.suma_plata, plati_facturi.data_plata
-    FROM plati_facturi
-    JOIN facturieri ON plati_facturi.id_facturier = facturieri.id_facturier
-    WHERE plati_facturi.id_client = '$id_client'
-    UNION ALL
-    SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
-    'Venit', transferuri.suma_transfer, transferuri.data_transfer
-    FROM transferuri
-    WHERE transferuri.id_client_destinatie = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')";
-// Verificăm dacă a fost trimisă o căutare
-if (isset($_GET['search'])) {
-    $search = mysqli_real_escape_string($conn, $_GET['search']);
+                                            // Construim interogarea de bază
+                                            $query = "SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
+                                                CASE
+                                                    WHEN transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') THEN 'Cheltuială'
+                                                    ELSE 'Venit'
+                                                END AS tip_tranzactie,
+                                                transferuri.suma_transfer, transferuri.data_transfer
+                                                FROM transferuri
+                                                WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
+                                                UNION ALL
+                                                SELECT plati_facturi.id_plata, facturieri.nume AS nume_beneficiar, plati_facturi.detalii_transfer,
+                                                'Cheltuială', plati_facturi.suma_plata, plati_facturi.data_plata
+                                                FROM plati_facturi
+                                                JOIN facturieri ON plati_facturi.id_facturier = facturieri.id_facturier
+                                                WHERE plati_facturi.id_client = '$id_client'
+                                                UNION ALL
+                                                SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
+                                                'Venit', transferuri.suma_transfer, transferuri.data_transfer
+                                                FROM transferuri
+                                                WHERE transferuri.id_client_destinatie = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')";
+                                            // Verificăm dacă a fost trimisă o căutare
+                                            if (isset($_GET['search'])) {
+                                                $search = mysqli_real_escape_string($conn, $_GET['search']);
 
-    // Interogare cu filtrare după nume beneficiar și detalii transfer
-    $query = "SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
-                CASE
-                    WHEN transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') THEN 'Cheltuială'
-                    ELSE 'Venit'
-                END AS tip_tranzactie,
-                transferuri.suma_transfer, transferuri.data_transfer
-                FROM transferuri
-                WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
-                AND (transferuri.nume_beneficiar LIKE '%$search%' OR transferuri.detalii_transfer LIKE '%$search%')
-                UNION ALL
-                SELECT plati_facturi.id_plata, facturieri.nume AS nume_beneficiar, plati_facturi.detalii_transfer,
-                'Cheltuială', plati_facturi.suma_plata, plati_facturi.data_plata
-                FROM plati_facturi
-                JOIN facturieri ON plati_facturi.id_facturier = facturieri.id_facturier
-                WHERE plati_facturi.id_client = '$id_client'
-                AND (facturieri.nume LIKE '%$search%' OR plati_facturi.detalii_transfer LIKE '%$search%')";
-}
-// Verificăm dacă a fost trimisă o filtrare prin formular
-if (isset($_POST['filtrare'])) {
-    $dataInceput = $_POST['dataInceput'];
-    $dataSfarsit = $_POST['dataSfarsit'];
+                                                // Interogare cu filtrare după nume beneficiar și detalii transfer
+                                                $query = "SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
+                                                            CASE
+                                                                WHEN transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') THEN 'Cheltuială'
+                                                                ELSE 'Venit'
+                                                            END AS tip_tranzactie,
+                                                            transferuri.suma_transfer, transferuri.data_transfer
+                                                            FROM transferuri
+                                                            WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
+                                                            AND (transferuri.nume_beneficiar LIKE '%$search%' OR transferuri.detalii_transfer LIKE '%$search%')
+                                                            UNION ALL
+                                                            SELECT plati_facturi.id_plata, facturieri.nume AS nume_beneficiar, plati_facturi.detalii_transfer,
+                                                            'Cheltuială', plati_facturi.suma_plata, plati_facturi.data_plata
+                                                            FROM plati_facturi
+                                                            JOIN facturieri ON plati_facturi.id_facturier = facturieri.id_facturier
+                                                            WHERE plati_facturi.id_client = '$id_client'
+                                                            AND (facturieri.nume LIKE '%$search%' OR plati_facturi.detalii_transfer LIKE '%$search%')";
+                                            }
+                                            // Verificăm dacă a fost trimisă o filtrare prin formular
+                                            if (isset($_POST['filtrare'])) {
+                                                $dataInceput = $_POST['dataInceput'];
+                                                $dataSfarsit = $_POST['dataSfarsit'];
 
-    // Adăugăm condițiile pentru filtrarea după dată în interogare
-    if (!empty($dataInceput) && !empty($dataSfarsit)) {
-        // Selecționăm transferurile între datele specificate
-        $query = "SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
-    CASE
-        WHEN transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') THEN 'Cheltuială'
-        ELSE 'Venit'
-    END AS tip_tranzactie,
-    transferuri.suma_transfer, transferuri.data_transfer
-    FROM transferuri
-    WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
-    AND transferuri.data_transfer transferuri.data_transfer BETWEEN '$dataInceput' AND '$dataSfarsit'
-    UNION ALL
-    SELECT plati_facturi.id_plata, facturieri.nume AS nume_beneficiar, plati_facturi.detalii_transfer,
-    'Cheltuială', plati_facturi.suma_plata, plati_facturi.data_plata
-    FROM plati_facturi
-    JOIN facturieri ON plati_facturi.id_facturier = facturieri.id_facturier
-    WHERE plati_facturi.id_client = '$id_client'
-    AND plati_facturi.data_plata transferuri.data_transfer BETWEEN '$dataInceput' AND '$dataSfarsit'
-    UNION ALL
-    SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
-    'Venit', transferuri.suma_transfer, transferuri.data_transfer
-    FROM transferuri
-    WHERE transferuri.id_client_destinatie = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
-    AND transferuri.data_transfer BETWEEN '$dataInceput' AND '$dataSfarsit'";
-    } elseif (!empty($dataInceput)) {
-        // Selecționăm transferurile după data de început specificată
-        $query = "SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
-    CASE
-        WHEN transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') THEN 'Cheltuială'
-        ELSE 'Venit'
-    END AS tip_tranzactie,
-    transferuri.suma_transfer, transferuri.data_transfer
-    FROM transferuri
-    WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
-    AND transferuri.data_transfer >= '$dataInceput'
-    UNION ALL
-    SELECT plati_facturi.id_plata, facturieri.nume AS nume_beneficiar, plati_facturi.detalii_transfer,
-    'Cheltuială', plati_facturi.suma_plata, plati_facturi.data_plata
-    FROM plati_facturi
-    JOIN facturieri ON plati_facturi.id_facturier = facturieri.id_facturier
-    WHERE plati_facturi.id_client = '$id_client'
-    AND plati_facturi.data_plata >= '$dataInceput'
-    UNION ALL
-    SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
-    'Venit', transferuri.suma_transfer, transferuri.data_transfer
-    FROM transferuri
-    WHERE transferuri.id_client_destinatie = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
-    AND transferuri.data_transfer BETWEEN '$dataInceput' AND '$dataSfarsit'";
-    } elseif (!empty($dataSfarsit)) {
-        // Selecționăm transferurile până la data de sfârșit specificată
-        $query = "SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
-    CASE
-        WHEN transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') THEN 'Cheltuială'
-        ELSE 'Venit'
-    END AS tip_tranzactie,
-    transferuri.suma_transfer, transferuri.data_transfer
-    FROM transferuri
-    WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
-    AND transferuri.data_transfer <= '$dataSfarsit'
-    UNION ALL
-    SELECT plati_facturi.id_plata, facturieri.nume AS nume_beneficiar, plati_facturi.detalii_transfer,
-    'Cheltuială', plati_facturi.suma_plata, plati_facturi.data_plata
-    FROM plati_facturi
-    JOIN facturieri ON plati_facturi.id_facturier = facturieri.id_facturier
-    WHERE plati_facturi.id_client = '$id_client'
-    AND plati_facturi.data_plata <= '$dataSfarsit'
-    UNION ALL
-    SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
-    'Venit', transferuri.suma_transfer, transferuri.data_transfer
-    FROM transferuri
-    WHERE transferuri.id_client_destinatie = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
-    AND transferuri.data_transfer BETWEEN '$dataInceput' AND '$dataSfarsit'";
-    }
-}
+                                                // Adăugăm condițiile pentru filtrarea după dată în interogare
+                                                if (!empty($dataInceput) && !empty($dataSfarsit)) {
+                                                    // Selecționăm transferurile între datele specificate
+                                                    $query = "SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
+                                                CASE
+                                                    WHEN transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') THEN 'Cheltuială'
+                                                    ELSE 'Venit'
+                                                END AS tip_tranzactie,
+                                                transferuri.suma_transfer, transferuri.data_transfer
+                                                FROM transferuri
+                                                WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
+                                                AND transferuri.data_transfer BETWEEN '$dataInceput' AND '$dataSfarsit'
 
-// Interogăm baza de date pentru a obține transferurile efectuate de către clientul conectat în sesiune
-$result = mysqli_query($conn, $query);
+                                                UNION ALL
+                                                SELECT plati_facturi.id_plata, facturieri.nume AS nume_beneficiar, plati_facturi.detalii_transfer,
+                                                'Cheltuială', plati_facturi.suma_plata, plati_facturi.data_plata
+                                                FROM plati_facturi
+                                                JOIN facturieri ON plati_facturi.id_facturier = facturieri.id_facturier
+                                                WHERE plati_facturi.id_client = '$id_client'
+                                                AND plati_facturi.data_plata BETWEEN '$dataInceput' AND '$dataSfarsit'
 
-// Verificăm dacă există rezultate
-if (mysqli_num_rows($result) > 0) {
+                                                UNION ALL
+                                                SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
+                                                'Venit', transferuri.suma_transfer, transferuri.data_transfer
+                                                FROM transferuri
+                                                WHERE transferuri.id_client_destinatie = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
+                                                AND transferuri.data_transfer BETWEEN '$dataInceput' AND '$dataSfarsit'";
+                                                } elseif (!empty($dataInceput)) {
+                                                    // Selecționăm transferurile după data de început specificată
+                                                    $query = "SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
+                                                CASE
+                                                    WHEN transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') THEN 'Cheltuială'
+                                                    ELSE 'Venit'
+                                                END AS tip_tranzactie,
+                                                transferuri.suma_transfer, transferuri.data_transfer
+                                                FROM transferuri
+                                                WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
+                                                AND transferuri.data_transfer >= '$dataInceput'
+                                                UNION ALL
+                                                SELECT plati_facturi.id_plata, facturieri.nume AS nume_beneficiar, plati_facturi.detalii_transfer,
+                                                'Cheltuială', plati_facturi.suma_plata, plati_facturi.data_plata
+                                                FROM plati_facturi
+                                                JOIN facturieri ON plati_facturi.id_facturier = facturieri.id_facturier
+                                                WHERE plati_facturi.id_client = '$id_client'
+                                                AND plati_facturi.data_plata >= '$dataInceput'
+                                                UNION ALL
+                                                SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
+                                                'Venit', transferuri.suma_transfer, transferuri.data_transfer
+                                                FROM transferuri
+                                                WHERE transferuri.id_client_destinatie = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
+                                                AND transferuri.data_transfer BETWEEN '$dataInceput' AND '$dataSfarsit'";
+                                                } elseif (!empty($dataSfarsit)) {
+                                                    // Selecționăm transferurile până la data de sfârșit specificată
+                                                    $query = "SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
+                                                CASE
+                                                    WHEN transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') THEN 'Cheltuială'
+                                                    ELSE 'Venit'
+                                                END AS tip_tranzactie,
+                                                transferuri.suma_transfer, transferuri.data_transfer
+                                                FROM transferuri
+                                                WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
+                                                AND transferuri.data_transfer <= '$dataSfarsit'
+                                                UNION ALL
+                                                SELECT plati_facturi.id_plata, facturieri.nume AS nume_beneficiar, plati_facturi.detalii_transfer,
+                                                'Cheltuială', plati_facturi.suma_plata, plati_facturi.data_plata
+                                                FROM plati_facturi
+                                                JOIN facturieri ON plati_facturi.id_facturier = facturieri.id_facturier
+                                                WHERE plati_facturi.id_client = '$id_client'
+                                                AND plati_facturi.data_plata <= '$dataSfarsit'
+                                                UNION ALL
+                                                SELECT transferuri.id_transfer, transferuri.nume_beneficiar, transferuri.detalii_transfer,
+                                                'Venit', transferuri.suma_transfer, transferuri.data_transfer
+                                                FROM transferuri
+                                                WHERE transferuri.id_client_destinatie = (SELECT id_cont FROM conturi WHERE id_client = '$id_client')
+                                                AND transferuri.data_transfer BETWEEN '$dataInceput' AND '$dataSfarsit'";
+                                                }
+                                            }
+
+                                            // Interogăm baza de date pentru a obține transferurile efectuate de către clientul conectat în sesiune
+                                            $result = mysqli_query($conn, $query);
+
+                                            // Verificăm dacă există rezultate
+                                            if (mysqli_num_rows($result) > 0) {
 
 
-    // Parcurgem fiecare rând din rezultat și afișăm detaliile transferurilor
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo "<tr class='border-b dark:border-neutral-500'>";
-        echo "<td class='whitespace-nowrap px-6 py-4 font-medium'>" . $row['id_transfer'] . "</td>";
-        echo "<td class='whitespace-nowrap px-6 py-4'>" . $row['nume_beneficiar'] .  "</td>";
-        echo "<td class='whitespace-nowrap px-6 py-4'>" . $row['suma_transfer'] . "</td>";
-        echo "<td class='whitespace-nowrap px-6 py-4'>" . $row['data_transfer'] . "</td>";
-        echo "<td class='whitespace-nowrap px-6 py-4'>" . $row['detalii_transfer'] . "</td>";
-        echo "<td class='whitespace-nowrap px-6 py-4'>" . $row["tip_tranzactie"] . "</td>";
-        echo "</tr>";
-    }
+                                                // Parcurgem fiecare rând din rezultat și afișăm detaliile transferurilor
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo "<tr class='border-b dark:border-neutral-500'>";
+                                                    echo "<td class='whitespace-nowrap px-6 py-4 font-medium'>" . $row['id_transfer'] . "</td>";
+                                                    echo "<td class='whitespace-nowrap px-6 py-4'>" . $row['nume_beneficiar'] .  "</td>";
+                                                    echo "<td class='whitespace-nowrap px-6 py-4'>" . $row['suma_transfer'] . "</td>";
+                                                    echo "<td class='whitespace-nowrap px-6 py-4'>" . $row['data_transfer'] . "</td>";
+                                                    echo "<td class='whitespace-nowrap px-6 py-4'>" . $row['detalii_transfer'] . "</td>";
+                                                    echo "<td class='whitespace-nowrap px-6 py-4'>" . $row["tip_tranzactie"] . "</td>";
+                                                    echo "</tr>";
+                                                }
 
-    echo "</tbody>";
-    echo "</table>";
-} else {
-    // Afișăm un mesaj dacă nu există rezultate
-    echo 'Nu s-au găsit rezultate.';
-}
-?>
+                                                echo "</tbody>";
+                                                echo "</table>";
+                                            } else {
+                                                // Afișăm un mesaj dacă nu există rezultate
+                                                echo 'Nu s-au găsit rezultate.';
+                                            }
+                                            ?>
 
 
                                     </tbody>
@@ -291,14 +329,18 @@ function adaugaFiltru() {
     randuri.forEach(function(rand) {
         var celulaTipTranzactie = rand.querySelector('td:nth-child(6)');
         var tipTranzactie = celulaTipTranzactie.textContent || celulaTipTranzactie.innerText;
+        var celulaDetaliiTransfer = rand.querySelector('td:nth-child(5)');
+        var detaliiTransfer = celulaDetaliiTransfer.textContent || celulaDetaliiTransfer.innerText;
 
-        if (selectii.length > 0 && selectii.indexOf(tipTranzactie) === -1) {
+        if (selectii.length > 0 && selectii.indexOf(tipTranzactie) === -1 && selectii.indexOf(
+                detaliiTransfer) === -1) {
             rand.style.display = 'none';
         } else {
             rand.style.display = '';
         }
     });
 }
+
 
 function exportaTransferuri() {
     // Colecționează rândurile tabelului
@@ -310,17 +352,24 @@ function exportaTransferuri() {
     // Verifică starea checkbox-urilor
     var checkboxCheltuiala = document.getElementById('checkbox1');
     var checkboxVenit = document.getElementById('checkbox2');
+    var checkboxplatafactura = document.getElementById('checkbox3');
     var filtrareCheltuiala = checkboxCheltuiala.checked;
     var filtrareVenit = checkboxVenit.checked;
+    var filtrareplatafactura = checkboxplatafactura.checked;
 
     // Filtrează transferurile în funcție de checkbox-uri
     for (var i = 0; i < randuri.length; i++) {
         var rand = randuri[i];
         var celulaTipTranzactie = rand.querySelector('td:nth-child(6)');
         var tipTranzactie = celulaTipTranzactie.textContent || celulaTipTranzactie.innerText;
+        var celulaDetaliiTransfer = rand.querySelector('td:nth-child(5)');
+        var detaliiTransfer = celulaDetaliiTransfer.textContent || celulaDetaliiTransfer.innerText;
 
         if ((filtrareCheltuiala && tipTranzactie === 'Cheltuială') ||
-            (filtrareVenit && tipTranzactie === 'Venit')) {
+            (filtrareVenit && tipTranzactie === 'Venit')
+            ||
+            (filtrareplatafactura && detaliiTransfer === 'plată factură')
+            ) {
             transferuriFiltrate.push(rand);
         }
     }
@@ -357,5 +406,22 @@ function encodeExcel(transferuri) {
     return base64(formatExcel(excel));
 }
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modalButton = document.getElementById('modalButton');
+    const closeModalButton = document.getElementById('closeModalButton');
+    const modal = document.getElementById('myModal');
+
+    modalButton.addEventListener('click', function() {
+        modal.classList.remove('hidden');
+    });
+
+    closeModalButton.addEventListener('click', function() {
+        modal.classList.add('hidden');
+    });
+});
+</script>
+
 
 <?php require('partials/footer.php') ?>

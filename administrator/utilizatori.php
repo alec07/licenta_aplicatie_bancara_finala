@@ -4,7 +4,6 @@
     $result = $conn->query($sql);
 ?>
 
-
 <?php
 // Interogare pentru numărul de conturi deschise
 $queryConturiDeschise = "SELECT COUNT(*) as numar_conturi_deschise FROM inregistrare_client where user_type='user' ";
@@ -22,8 +21,8 @@ $conturiInchise = $rowConturiInchise['numar_conturi_inchise'];
 $procentConturiDeschise = ($conturiDeschise / ($conturiDeschise + $conturiInchise)) * 100;
 $procentConturiInchise = ($conturiInchise / ($conturiDeschise + $conturiInchise)) * 100;
 ?>
-<?php
 
+<?php
 $query = "SELECT * FROM inregistrare_client  WHERE user_type = 'user'";
 $result2 = mysqli_query($conn, $query);
 $total_utilizatori = mysqli_num_rows($result2);
@@ -35,23 +34,21 @@ $queryPlati = "SELECT COUNT(DISTINCT id_client) as numar_plati FROM plati_factur
 $resultPlati = mysqli_query($conn, $queryPlati);
 $rowPlati = mysqli_fetch_assoc($resultPlati);
 $numarPlati = $rowPlati['numar_plati'];
-
-
 ?>
+
 <?php require('partials/head.php') ?>
 <?php include ('partials/sidebar.php'); ?>
+
 <?php
 // Verificăm dacă există cererea POST pentru filtrare
 if (isset($_POST['filtrare'])) {
     $dataInceput = $_POST['dataInceput'];
     $dataSfarsit = $_POST['dataSfarsit'];
 
-  // Realizați interogarea bazei de date pentru a filtra în funcție de perioadă
+  // interogarea bazei de date pentru a filtra în funcție de perioadă
 $query = "SELECT * FROM inregistrare_client WHERE user_type = 'user' AND ((data_nastere BETWEEN '$dataInceput' AND '$dataSfarsit') OR (data_deschidere BETWEEN '$dataInceput' AND '$dataSfarsit'))";
 
 $result = $conn->query($query);
-
-
 }
 else{
     // Dacă nu există o cerere de filtrare, afișăm toate înregistrările
@@ -119,7 +116,7 @@ else{
                             </div>
                         </form>
                     </div>
-                    <!-- Afișați tabelul cu rezultatele filtrate sau toate înregistrările -->
+                    <!-- tabelul cu rezultatele filtrate sau toate înregistrările -->
                     <table class="w-full text-sm text-center text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                             <tr>
@@ -162,23 +159,23 @@ else{
                         </thead>
                         <tbody>
                             <?php
-                            if (isset($_GET['search'])) {
-                                $search = $_GET['search'];
+                                if (isset($_GET['search'])) {
+                                    $search = $_GET['search'];
 
-                                // Adăugați condiția de căutare în interogarea inițială
-                                $query .= " AND (nume LIKE '%$search%' OR prenume LIKE '%$search%')";
-                            }
-                            $result = mysqli_query($conn, $query);
+                                    //  condiția de căutare în interogarea inițială
+                                    $query .= " AND (nume LIKE '%$search%' OR prenume LIKE '%$search%')";
+                                }
+                                $result = mysqli_query($conn, $query);
 
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    // Afișați înregistrările în tabel
-                                    $id_oras = $row['oras'];
-                                    // Realizam o interogare suplimentară pentru a obține numele orașului bazat pe ID-ul orașului
-                                    $query_oras = "SELECT nume_oras FROM orase WHERE id_oras = $id_oras";
-                                    $result_oras = mysqli_query($conn, $query_oras);
-                                    $oras = mysqli_fetch_assoc($result_oras)['nume_oras'];
-                                    ?>
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        // Afișați înregistrările în tabel
+                                        $id_oras = $row['oras'];
+                                        // Realizam o interogare suplimentară pentru a obține numele orașului bazat pe ID-ul orașului
+                                        $query_oras = "SELECT nume_oras FROM orase WHERE id_oras = $id_oras";
+                                        $result_oras = mysqli_query($conn, $query_oras);
+                                        $oras = mysqli_fetch_assoc($result_oras)['nume_oras'];
+                            ?>
                             <tr>
                                 <td class="px-4 py-2"><?php echo $row['id_client']; ?></td>
                                 <td class="px-4 py-2"><?php echo $row['nume']; ?></td>

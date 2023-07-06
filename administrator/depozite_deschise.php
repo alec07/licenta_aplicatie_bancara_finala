@@ -116,12 +116,13 @@
                                 <option value="durata-desc">Durată (descendent)</option>
                             </select>
                             <button type="submit" name="filter-button"
-                            class="px-4 py-2 bg-blue-500 text-white rounded">Filtrează</button>
+                                class="px-4 py-2 bg-blue-500 text-white rounded">Filtrează</button>
                         </div>
                     </div>
                 </div>
+            </form>
                 <div class="mt-5 relative overflow-x-auto">
-                    <table class="w-full bg-white border border-gray-300">
+                    <table class="text-left w-full bg-white border border-gray-300">
                         <!-- Codul PHP pentru afișarea tabelului și filtrarea rezultatelor -->
                         <thead>
                             <tr>
@@ -216,9 +217,17 @@
                                         echo "<td class=\"py-2 px-4 border-b\">$dobanda</td>";
                                         echo "<td class=\"py-2 px-4 border-b\">$dataDeschidere</td>";
                                         echo "<td class=\"py-2 px-4 border-b\">$stare</td>";
+                                        // echo "<td class=\"py-2 px-4 border-b\">";
+                                        // echo "<form method=\"POST\" action=\"modificare_depozit.php\">";
+                                        // echo "<input type=\"hidden\" name=\"id_depozit\" value=\"$numarDepozit\">";
+                                        // echo "<button type=\"submit\" class=\"text-blue-500 mr-2\" name=\"modificare\">Modificare</button>";
+                                        // echo "</form>";
+                                        // echo "</td>";
                                         echo "<td class=\"py-2 px-4 border-b\">";
-                                        echo "<button class=\"text-blue-500 mr-2\">Modificare</button>";
-                                        echo "<button class=\"text-red-500\">Ștergere</button>";
+                                        echo "<form method=\"POST\" action=\"include/sterge_depozit.php\">";
+                                        echo "<input type=\"hidden\" name=\"id_depozit\" value=\"$numarDepozit\">";
+                                        echo "<button type=\"submit\" class=\"text-red-500\" name=\"sterge\">Ștergere</button>";
+                                        echo "</form>";
                                         echo "</td>";
                                         echo "</tr>";
                                     }
@@ -235,7 +244,7 @@
                         </tbody>
                     </table>
                 </div>
-            </form>
+
             <div class="mt-8">
                 <h3 class="text-lg font-semibold">Înregistrări și rapoarte</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">

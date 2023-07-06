@@ -32,7 +32,7 @@ if (isset($_GET["id_pagina"])) {
     if ($result->num_rows > 0) {
         echo "<h1 class='text-4xl mb-10'>Istoric pagină</h1>";
         echo "<table class='w-full text-sm text-left text-gray-500 '>";
-        echo "<thead class='text-xs text-gray-700 uppercase bg-gray-50' ><tr><th scope='col; class='px-6 py-2'>Data Editare</th><th>H1 Text</th><th>H2 Text</th></tr></thead>";
+        echo "<thead class='text-xs text-gray-700 uppercase bg-gray-50' ><tr><th scope='col; class='px-6 py-2'>Data Editare</th><th>Ttilul paginii</th><th>Conținutul text al paginii</th></tr></thead>";
 
         while ($row = $result->fetch_assoc()) {
             $data_editare = $row['data_editare'];

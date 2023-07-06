@@ -12,7 +12,7 @@ if (isset($_POST['generate-financial-report'])) {
         $file = fopen('raport_financiar.csv', 'w');
 
         // Adăugați antetele de coloană în fișierul CSV
-        $header = array('Număr depozit', 'Titular', 'Sumă', 'Durată', 'Dobândă', 'Data deschidere', 'Stare');
+        $header = array('Numar depozit', 'Titular', 'Suma', 'Durata', 'Dobanda', 'Data deschidere', 'Stare');
         fputcsv($file, $header);
 
         // Iterați prin fiecare rând de depozit
@@ -54,6 +54,10 @@ if (isset($_POST['generate-financial-report'])) {
 
         // Terminați execuția scriptului
         exit;
+    }else {
+        // Nu există depozite deschise în luna curentă
+        $msg = "Nu există depozite deschise ";
+        header("Location: ../depozite_deschise.php?msg=".urlencode($msg));
     }
 }
 

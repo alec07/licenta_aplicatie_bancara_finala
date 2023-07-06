@@ -31,12 +31,15 @@ if (isset($_POST['submit'])) {
         // Adaugă transferul în baza de date
         $query_adaugare_transfer = "INSERT INTO transferuri (id_client_sursa, id_client_destinatie, suma_transfer, detalii_transfer, nume_beneficiar, iban_beneficiar) VALUES ('$id_cont_sursa', (SELECT id_cont FROM conturi WHERE iban = '$iban_beneficiar'), '$suma_transfer', '$detalii_transfer','$nume_beneficiar','$iban_beneficiar')";
         if (mysqli_query($conn, $query_adaugare_transfer)) {
-          echo "Transferul a fost efectuat cu succes!";
+          $msg = "Transferul a fost efectuat cu succes!";
+          header("Location: ../toate-transferurile.php?msg=" . urlencode($msg));
         } else {
-          echo "Eroare la adăugarea transferului: " . mysqli_error($conn);
+          $msg = "Eroare la adăugarea transferului";
+          header("Location: ../toate-transferurile.php?msg=" . urlencode($msg));
         }
       } else {
-        echo "Eroare la actualizarea contului beneficiarului: " . mysqli_error($conn);
+        $msg = "Eroare la actualizarea contului beneficiarului:";
+        header("Location: ../toate-transferurile.php?msg=" . urlencode($msg));
       }
     } else {
       // Beneficiarul nu există în baza de date, se scad banii din contul clientului sursă
@@ -44,16 +47,21 @@ if (isset($_POST['submit'])) {
       // Adaugă transferul în baza de date
       $query_adaugare_transfer = "INSERT INTO transferuri (id_client_sursa, iban_beneficiar, suma_transfer, detalii_transfer, nume_beneficiar) VALUES ('$id_cont_sursa', '$iban_beneficiar', '$suma_transfer', '$detalii_transfer', '$nume_beneficiar')";
       if (mysqli_query($conn, $query_adaugare_transfer)) {
-        echo "Transferul a fost efectuat cu succes!";
+        $msg = "Transferul a fost efectuat cu succes!";
+        header("Location: ../toate-transferurile.php?msg=" . urlencode($msg));
+
       } else {
-        echo "Eroare la adăugarea transferului: " . mysqli_error($conn);
+        $msg = "Eroare la adăugarea transferului";
+        header("Location: ../toate-transferurile.php?msg=" . urlencode($msg));
       }
     }
   } else {
-    echo "Clientul sursă nu există în baza de date.";
+    $msg = "Clientul sursă nu există în baza de date.";
+    header("Location: ../toate-transferurile.php?msg=" . urlencode($msg));
   }
 } else {
-  echo "Formularul nu a fost submitat.";
+  $msg = "Formularul nu a fost submitat.";
+  header("Location: ../toate-transferurile.php?msg=" . urlencode($msg));
 }
 
 mysqli_close($conn);

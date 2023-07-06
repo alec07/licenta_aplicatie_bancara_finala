@@ -46,11 +46,15 @@
                                 </div>
                                 <div class="flex flex-row items-center">
                                     <label for="suma_depusa"
-                                        class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 px-2">Suma:</label>
+                                        class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 px-2">
+                                        Suma:
+                                    </label>
                                     <input type="text" name="suma_depusa" id="suma_depusa"
                                         class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                        placeholder=" " required />
+                                        placeholder=" " required
+                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '')" />
                                 </div>
+
                                 <div class="flex flex-row items-center mt-2">
                                     <label for="perioada_depozit"
                                         class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 px-2 ">Perioada:</label>

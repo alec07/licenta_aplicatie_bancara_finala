@@ -1,4 +1,5 @@
-<?php include('include/db.inc.php');
+<?php
+include('include/db.inc.php');
 session_start(); ?>
 <?php require('partials/head.php') ?>
 <?php include ('partials/sidebar.php'); ?>
@@ -22,14 +23,16 @@ if (isset($_POST['filtrare'])) {
 }
 ?>
 
-<div class="py-4 sm:ml-60">
-    <div class=" mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <div class="flex min-h-full  px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col w-screen h-screen overflow-auto text-gray-700 ">
+    <div class="p-4 sm:ml-64">
+        <div class="w-full max-w-6xl min-h-screen mx-auto bg-white">
             <div class="w-full ">
-                <div class=" text-sm text-center mb-12 ">
-                    <h1 class="text-3xl text-slate-800 justify-left flex mb-4">Tranzactii</h1>
+                <div class="text-center mb-12 ">
+                    <h1 class="text-3xl text-slate-800 justify-left flex mb-5">Raport - Tranzactii</h1>
+                    <p class="text-xs text-slate-800 justify-left flex mb-5">*pentru un raport mai detaliat, filtrează după dată, apoi caută după nume</p>
+
                     <?php include ('partials/form_cautare.php'); ?>
-                    <!-- Adăugați formularul pentru filtrare în partea de sus a tabelului -->
+                    <!-- formular pentru filtrare în partea de sus a tabelului -->
                     <div class="flex justify-between">
                         <div class="flex items-between mb-2">
                             <form method="POST" class="mb-4">
@@ -45,26 +48,37 @@ if (isset($_POST['filtrare'])) {
                             </form>
                         </div>
                         <div>
-                            <button type="button"
-                                class=" text-slate-600 bg-slate-100  focus:outline-none hover:bg-slate-200 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-xs px-5 py-2  mb-2 "><a
-                                    href="include/exporta_utilizatori.inc.php"> Exporta</a></button>
+                        <form method="POST" action="include/exporta_tranzactii.inc.php">
+                            <div>
+                                <button type="submit" name="export"
+                                    class="justify-right text-slate-600 bg-slate-100 focus:outline-none hover:bg-slate-200 font-medium rounded-full text-xs px-5 py-2 mb-2">
+                                    Exporta
+                                </button>
+                            </div>
+                        </form>
                         </div>
                     </div>
 
                     <div class="relative overflow-x-auto">
-                    <table class="w-full text-sm text-center text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <table class="w-full text-sm text-center text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th scope="col" class="px-6 py-2">
                                         ID
                                         <button onclick="sortTable(0, 'asc')">▲</button>
-                                    <button onclick="sortTable(0, 'desc')">▼</button>
+                                        <button onclick="sortTable(0, 'desc')">▼</button>
                                     </th>
                                     <th scope="col" class="px-6 py-2">
-                                        DE LA
+                                        IBAN Client
                                     </th>
                                     <th scope="col" class="px-6 py-2">
-                                        CATRE
+                                        DE LA: Nume Client
+                                    </th>
+                                    <th scope="col" class="px-6 py-2">
+                                        CATRE: Nume Beneficiar
+                                    </th>
+                                    <th scope="col" class="px-6 py-2">
+                                        IBAN Beneficiar
                                     </th>
                                     <th scope="col" class="px-6 py-2">
                                         SUMA
@@ -82,18 +96,11 @@ if (isset($_POST['filtrare'])) {
                                     $dataSfarsit = $_POST['dataSfarsit'];
 
                                     // Realizați interogarea bazei de date pentru a filtra în funcție de perioadă
-                                    $sql = "SELECT t.id_transfer,
-                                                sursa.nume AS nume_sursa,
-                                                sursa.prenume AS prenume_sursa,
-                                                destinatie.nume AS nume_destinatie,
-                                                destinatie.prenume AS prenume_destinatie,
-                                                t.suma_transfer,
-                                                t.data_transfer
-                                            FROM transferuri t
-                                            JOIN conturi c1 ON t.id_client_sursa = c1.id_cont
-                                            JOIN inregistrare_client sursa ON c1.id_client = sursa.id_client
-                                            JOIN conturi c2 ON t.id_client_destinatie = c2.id_cont
-                                            JOIN inregistrare_client destinatie ON c2.id_client = destinatie.id_client
+                                    $sql = "SELECT ic.nume AS nume_sursa, ic.prenume AS prenume_sursa, c.iban, t.nume_beneficiar AS nume_destinatie, t.iban_beneficiar, t.detalii_transfer, t.data_transfer, t.suma_transfer, t.id_transfer
+                                    FROM transferuri t
+                                    LEFT JOIN plati_facturi p ON t.id_client_sursa = p.id_client
+                                    LEFT JOIN conturi c ON t.id_client_sursa = c.id_cont
+                                    LEFT JOIN inregistrare_client ic ON c.id_client = ic.id_client
                                             WHERE t.data_transfer BETWEEN ? AND ?";
                                     $stmt = $conn->prepare($sql);
                                     $stmt->bind_param("ss", $dataInceput, $dataSfarsit);
@@ -103,37 +110,34 @@ if (isset($_POST['filtrare'])) {
                                     $search = $_GET['search'];
 
                                     // Interogare SQL pentru a afișa transferurile și numele clienților implicați, cu condiția de căutare
-                                    $sql = "SELECT t.id_transfer,
-                                                sursa.nume AS nume_sursa,
-                                                sursa.prenume AS prenume_sursa,
-                                                destinatie.nume AS nume_destinatie,
-                                                destinatie.prenume AS prenume_destinatie,
-                                                t.suma_transfer,
-                                                t.data_transfer
-                                            FROM transferuri t
-                                            JOIN conturi c1 ON t.id_client_sursa = c1.id_cont
-                                            JOIN inregistrare_client sursa ON c1.id_client = sursa.id_client
-                                            JOIN conturi c2 ON t.id_client_destinatie = c2.id_cont
-                                            JOIN inregistrare_client destinatie ON c2.id_client = destinatie.id_client
-                                            WHERE sursa.nume LIKE '%$search%'
-                                            OR sursa.prenume LIKE '%$search%'
-                                            OR destinatie.nume LIKE '%$search%'
-                                            OR destinatie.prenume LIKE '%$search%'";
+                                    $sql = "SELECT ic.nume AS nume_sursa, ic.prenume AS prenume_sursa, c.iban, t.nume_beneficiar AS nume_destinatie, t.iban_beneficiar, t.detalii_transfer, t.data_transfer, t.suma_transfer, t.id_transfer
+                                    FROM transferuri t
+                                    LEFT JOIN plati_facturi p ON t.id_client_sursa = p.id_client
+                                    LEFT JOIN conturi c ON t.id_client_sursa = c.id_cont
+                                    LEFT JOIN inregistrare_client ic ON c.id_client = ic.id_client
+                                    WHERE ic.nume LIKE '%$search%'
+                                    OR ic.prenume LIKE '%$search%'
+                                    OR t.nume_beneficiar LIKE '%$search%'";
+                                     if (isset($_POST['filtrare'])) {
+                                        $dataInceput = $_POST['dataInceput'];
+                                        $dataSfarsit = $_POST['dataSfarsit'];
+
+                                        // Adăugăm condiția de filtrare după dată în interogarea SQL
+        // Adăugăm condiția de filtrare după dată în interogarea SQL, limitată doar la rezultatele căutării actuale
+        $sql .= " AND (t.data_transfer BETWEEN '$dataInceput' AND '$dataSfarsit')";
+    }
+
+    $result = mysqli_query($conn, $sql);
+
                                     $result = mysqli_query($conn, $sql);
                                 } else {
                                     // Dacă nu există o cerere de filtrare sau de căutare, afișăm toate transferurile și numele clienților implicați
-                                    $sql = "SELECT t.id_transfer,
-                                                sursa.nume AS nume_sursa,
-                                                sursa.prenume AS prenume_sursa,
-                                                destinatie.nume AS nume_destinatie,
-                                                destinatie.prenume AS prenume_destinatie,
-                                                t.suma_transfer,
-                                                t.data_transfer
-                                            FROM transferuri t
-                                            JOIN conturi c1 ON t.id_client_sursa = c1.id_cont
-                                            JOIN inregistrare_client sursa ON c1.id_client = sursa.id_client
-                                            JOIN conturi c2 ON t.id_client_destinatie = c2.id_cont
-                                            JOIN inregistrare_client destinatie ON c2.id_client = destinatie.id_client";
+                                    $sql = "SELECT ic.nume AS nume_sursa, ic.prenume AS prenume_sursa, c.iban, t.nume_beneficiar AS nume_destinatie, t.iban_beneficiar, t.detalii_transfer, t.data_transfer, t.suma_transfer, t.id_transfer
+                                    FROM transferuri t
+                                    LEFT JOIN plati_facturi p ON t.id_client_sursa = p.id_client
+                                    LEFT JOIN conturi c ON t.id_client_sursa = c.id_cont
+                                    LEFT JOIN inregistrare_client ic ON c.id_client = ic.id_client
+                                    ";
                                     $result = mysqli_query($conn, $sql);
                                 }
                                 ?>
@@ -143,8 +147,10 @@ if (isset($_POST['filtrare'])) {
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         echo "<tr>
                                                 <td class='px-4 py-2'>" . $row["id_transfer"] . "</td>
-                                                <td class='px-4 py-2'>" . $row["nume_sursa"] . " " . $row["prenume_sursa"] . "</td>
-                                                <td class='px-4 py-2'>" . $row["nume_destinatie"] . " " . $row["prenume_destinatie"] . "</td>
+                                                <td>" . $row["iban"] . "</td>
+                                                <td class='px-4 py-2'>" . $row["nume_sursa"] . " " . $row["prenume_sursa"]  . "</td>
+                                                <td class='px-4 py-2'>" . $row["nume_destinatie"] . "</td>
+                                                <td>" . $row["iban_beneficiar"] . "</td>
                                                 <td class='px-4 py-2'>" . $row["suma_transfer"] . "</td>
                                                 <td class='px-4 py-2'>" . $row["data_transfer"] . "</td>
                                             </tr>";
@@ -156,7 +162,6 @@ if (isset($_POST['filtrare'])) {
                                 // Închidere conexiune la baza de date
                                 mysqli_close($conn);
                                 ?>
-
                             </tbody>
                         </table>
                     </div>

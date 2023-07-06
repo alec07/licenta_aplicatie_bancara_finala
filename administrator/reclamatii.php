@@ -2,9 +2,9 @@
 <?php require('partials/head.php') ?>
 <?php include ('partials/sidebar.php'); ?>
 
-<div class="py-4 sm:ml-60">
-    <div class=" mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <div class="flex min-h-full  px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col w-screen h-screen overflow-auto text-gray-700 ">
+    <div class="p-4 sm:ml-64">
+        <div class="w-full max-w-6xl min-h-screen mx-auto bg-white">
             <div class="w-full ">
                 <div class=" text-sm text-center mb-12 ">
                     <h1 class="text-3xl text-slate-800 justify-left flex mb-5">Reclamatii</h1>

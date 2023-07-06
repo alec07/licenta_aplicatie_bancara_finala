@@ -294,44 +294,35 @@ session_start();
                             </thead>
                             <tbody class="">
                                 <?php
-                                        // Preluarea ID-ului clientului conectat în sesiune
-                                        $id_client = $_SESSION['id_client'];
+                                    $id_client = $_SESSION['id_client'];
 
-                                        // Interogarea bazei de date pentru a obține informații despre transferurile efectuate de clientul conectat în sesiune
-                                        $query = "SELECT transferuri.id_transfer, transferuri.id_client_destinatie, transferuri.suma_transfer, transferuri.data_transfer,transferuri.nume_beneficiar from transferuri
-                                                WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') AND transferuri.data_transfer >= DATE_SUB(NOW(), INTERVAL 10 DAY)";
+                                    // Interogarea bazei de date pentru a obține informații despre transferurile efectuate de clientul conectat în sesiune
+                                    $query = "SELECT transferuri.id_transfer, transferuri.id_client_destinatie, transferuri.suma_transfer, transferuri.data_transfer,transferuri.nume_beneficiar from transferuri
+                                            WHERE transferuri.id_client_sursa = (SELECT id_cont FROM conturi WHERE id_client = '$id_client') AND transferuri.data_transfer >= DATE_SUB(NOW(), INTERVAL 10 DAY)";
 
-                                        $result = mysqli_query($conn, $query);
+                                    $result = mysqli_query($conn, $query);
 
-                                        // Verificăm dacă interogarea a întors rezultate
-                                        if (mysqli_num_rows($result) > 0) {
-                                            // Începem să construim tabelul
-
-
-                                            // Parcurgem fiecare rând din rezultat și afișăm informațiile în tabel
-                                            while ($row = mysqli_fetch_assoc($result)) {
-                                                echo "<tr>";
-                                                echo "<td class='px-6 py-2'>" . $row["id_transfer"] . "</td>";
-                                                echo "<td class='px-6 py-2'>" . $row["nume_beneficiar"] . "</td>";
-                                                echo "<td class='px-6 py-2'>" . $row["suma_transfer"] . "</td>";
-                                                echo "<td class='px-6 py-2'>" . $row["data_transfer"] . "</td>";
-                                                echo "</tr>";
-                                            }
-
-                                            // Închidem tabelul
-
-                                        } else {
-                                            // Dacă interogarea nu a întors rezultate, afișăm un mesaj corespunzător
-                                            echo "Nu s-au găsit transferuri în ultimele 30 de zile.";
+                                    // Verificăm dacă interogarea a întors rezultate
+                                    if (mysqli_num_rows($result) > 0) {
+                                        // Parcurgem fiecare rând din rezultat și afișăm informațiile în tabel
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr>";
+                                            echo "<td class='px-6 py-2'>" . $row["id_transfer"] . "</td>";
+                                            echo "<td class='px-6 py-2'>" . $row["nume_beneficiar"] . "</td>";
+                                            echo "<td class='px-6 py-2'>" . $row["suma_transfer"] . "</td>";
+                                            echo "<td class='px-6 py-2'>" . $row["data_transfer"] . "</td>";
+                                            echo "</tr>";
                                         }
 
-                                        // Închidem conexiunea la baza de date
-                                        mysqli_close($conn);
-                                        ?>
-
+                                    } else {
+                                        // afișăm un mesaj corespunzător, in caz de nu sunt transferuri
+                                        echo "Nu s-au găsit transferuri în ultimele 30 de zile.";
+                                    }
+                                    // Închidem conexiunea la baza de date
+                                    mysqli_close($conn);
+                                ?>
                             </tbody>
                         </table>
-
                     </div>
                 </div>
 

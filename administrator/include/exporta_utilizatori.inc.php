@@ -1,6 +1,5 @@
 <?php
 include 'db.inc.php';
-
 // Verificați dacă s-a făcut clic pe butonul de export
 if (isset($_POST['export'])) {
 
@@ -57,7 +56,9 @@ if (isset($_POST['export'])) {
             fputcsv($file, $data);
         }
     } else {
-        echo "Nu există înregistrări disponibile.";
+            $msg = "Nu există înregistrări disponibile.";
+            header("Location: ../utilizatori.php?msg=".urlencode($msg));
+
     }
 
     // Închideți fișierul
