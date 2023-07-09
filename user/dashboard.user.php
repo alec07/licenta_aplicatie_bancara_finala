@@ -7,28 +7,7 @@ session_start();
 <?php require('partials/sidebar.php')?>
 <div class="flex flex-col w-screen h-screen overflow-auto text-gray-700 ">
     <div class="p-4 sm:ml-64">
-        <div class="
-          w-full
-          max-w-6xl
-          min-h-screen
-          mx-auto
-          bg-white
-          dark:bg-muted-900">
-
-
-            <div class="flex justify-between py-4 ">
-                <div class=" mb-3 xl:w-96">
-                    <div class=" relative mb-4 flex w-full flex-wrap items-stretch">
-                        <input type="search"
-                            class="relative m-0 block w-[1%] min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out focus:border-primary-600 focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                            placeholder="Search" aria-label="Search" aria-describedby="button-addon2" />
-                    </div>
-                </div>
-                <div class="justify-self-end ">
-
-                </div>
-            </div>
-
+        <div class="w-full max-w-6xl min-h-screen mx-auto bg-white dark:bg-muted-900">
             <!-- primul rand -->
             <div class="grid grid-cols-3 ">
                 <!-- prima coloana -->
@@ -70,14 +49,10 @@ session_start();
                                         echo 'Nu există o sesiune validă pentru utilizatorul curent';
                                     }
                                     ?>
-
-
                             </h2>
 
                             <p class="text-justify font-normal text-slate-500 ">Totul pare să fie în regulă și la zi cu
-                                contul dvs. de la ultima
-                                dvs. vizită.
-                                Doriți să faceti vreun transfer?</p>
+                                contul dvs. de la ultima dvs. vizită. Doriți să faceti vreun transfer?</p>
                             <button class="rounded-full bg-violet-500 p-2 text-white "> <a
                                     href="transferuri.php">Transfera</a></button>
                         </div>
@@ -92,7 +67,6 @@ session_start();
                             <p class="flex">
                                 <span class="text-3xl bold">
                                     <?php
-
                                         if (isset($_SESSION['id_client'])) {
                                             $id_client = $_SESSION['id_client'];
                                             $query = "SELECT suma_depusa FROM conturi WHERE id_client='$id_client'";
@@ -115,31 +89,26 @@ session_start();
                                 </svg>
                             </p>
                             <canvas width="50" height="20" id="myChart"></canvas>
-                            <!-- <?php
-                            if (isset($_SESSION['id_client'])) {// Get the client ID from the session
-                                $id_client = $_SESSION['id_client'];
-                                // Build the query
+                             <?php
+                                if (isset($_SESSION['id_client'])) {
+                                    $id_client = $_SESSION['id_client'];
+                                        //  query
+                                        $query = "SELECT DATE(t.data_transfer) AS date, SUM(t.suma_transfer) AS total
+                                        FROM transferuri t
+                                        INNER JOIN conturi c ON t.id_client_sursa = c.id_cont
+                                        WHERE c.id_client = $id_client
+                                        GROUP BY DATE(t.data_transfer)";
+                                        $result = $conn->query($query);
 
-                                    // Build the query
-
-                                    // Build the query
-                                    $query = "SELECT DATE(t.data_transfer) AS date, SUM(t.suma_transfer) AS total
-                                    FROM transferuri t
-                                    INNER JOIN conturi c ON t.id_client_sursa = c.id_cont
-                                    WHERE c.id_client = $id_client
-                                    GROUP BY DATE(t.data_transfer)";
-                                    $result = $conn->query($query);
-
-                                    // Store the data in an array
-                                    $data = array();
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                        $data[$row['date']] = $row['total'];
+                                        // stocheaza data in array
+                                        $data = array();
+                                        if ($result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                            $data[$row['date']] = $row['total'];
+                                            }
                                         }
                                     }
-                                }
-
-                                ?> -->
+                                ?>
                         </div>
                     </div>
                 </div>
@@ -155,7 +124,6 @@ session_start();
                         <p class="flex">
                             <span class="text-6xl bold">
                                 <?php
-                                    // Preluăm ID-ul clientului conectat în sesiune
                                     $id_client = $_SESSION['id_client'];
                                     // Calculăm data de acum 30 de zile
                                     $date = date('Y-m-d', strtotime('-30 days'));
@@ -186,7 +154,6 @@ session_start();
                         <div class="mt-2 text-right">
                             <a href="toate-transferurile.php"
                                 class="text-violet-500 group inline-flex items-center gap-3 text-primary-500 hover:text-primary-400 transition-colors duration-300">
-
                                 <span class=" font-sans font-medium text-base">Vezi toate</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                     class="w-5 h-5">
@@ -207,7 +174,6 @@ session_start();
                         <p class="flex">
                             <span class="text-6xl bold">
                                 <?php
-                                    // Preluăm ID-ul clientului conectat în sesiune
                                     $id_client = $_SESSION['id_client'];
 
                                     // Calculăm data de acum 30 de zile în formatul de date al MySQL
@@ -227,8 +193,6 @@ session_start();
                                         // Dacă interogarea a eșuat, afișăm un mesaj de eroare
                                         echo "0.00 ";
                                     }
-
-
                                     ?>
                             </span>
                             <svg class="h-8 w-8 text-gray-500" width="24" height="24" viewBox="0 0 24 24"
@@ -279,7 +243,6 @@ session_start();
                         </div>
                     </div>
 
-
                     <div class="relative overflow-x-auto">
                         <table class="w-full text-sm text-center text-gray-500 ">
                             <thead>
@@ -288,8 +251,6 @@ session_start();
                                     <th class="text-slate-500 text-sm font-medium px-4 py-2">Nume Destinatar</th>
                                     <th class="text-slate-500 text-sm font-medium px-2 py-2">Suma Transferata</th>
                                     <th class="text-slate-500 text-sm font-medium px-4 py-2">Data si Ora</th>
-
-                                    <!-- adaugam o coloana pentru butoanele de actiune -->
                                 </tr>
                             </thead>
                             <tbody class="">
@@ -313,47 +274,44 @@ session_start();
                                             echo "<td class='px-6 py-2'>" . $row["data_transfer"] . "</td>";
                                             echo "</tr>";
                                         }
-
                                     } else {
                                         // afișăm un mesaj corespunzător, in caz de nu sunt transferuri
                                         echo "Nu s-au găsit transferuri în ultimele 30 de zile.";
                                     }
-                                    // Închidem conexiunea la baza de date
                                     mysqli_close($conn);
                                 ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: <?php echo json_encode(array_keys($data)); ?>,
-            datasets: [{
-                label: 'Money transferred per day',
-                data: <?php echo json_encode(array_values($data)); ?>,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: "rgb(167, 139, 250)",
-                borderWidth: 1
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: <?php echo json_encode(array_keys($data)); ?>,
+        datasets: [{
+            label: 'Money transferred per day',
+            data: <?php echo json_encode(array_values($data)); ?>,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: "rgb(167, 139, 250)",
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
             }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
         }
-    });
-    </script>
-    <?php require('partials/footer.php'); ?>
+    }
+});
+</script>
+<?php require('partials/footer.php'); ?>

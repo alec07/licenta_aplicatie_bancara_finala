@@ -88,8 +88,6 @@ session_start();
                                     </thead>
                                     <tbody>
                                         <?php
-
-
                                            $id_client = $_SESSION['id_client']; // ID-ul clientului conectat în sesiune
                                            $query = "SELECT * FROM depozite WHERE id_client = $id_client AND expirat = 1";
                                            $result = mysqli_query($conn, $query);
@@ -109,7 +107,6 @@ session_start();
                                            }
 
                                            mysqli_close($conn);
-
                                     ?>
                                     </tbody>
                                 </table>

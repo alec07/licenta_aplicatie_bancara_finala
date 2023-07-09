@@ -7,7 +7,7 @@
     <span class="text-gray-200 mx-2">/</span>
     <a href="despreapp.php" class="text-gray-300">Welcome to CeloBank</a>
     <span class="text-gray-200 mx-2">/</span>
-    <a href="ORGANIGRAMA.PHP.php" class="text-gray-300">Organigramă</a>
+    <a href="organigrama.php" class="text-gray-300">Organigramă</a>
 
     <div class="mt-5 mb-5">
         <h1 class="text-orange-200 font-serif text-4xl">TABEL CURS VALUTAR</h1>

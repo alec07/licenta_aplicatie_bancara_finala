@@ -6,7 +6,6 @@ include('includes/db.inc.php');
 <?php require('partials/navbar.php') ?>
 
 <div class="flex flex-col w-screen h-screen overflow-auto text-gray-700 ">
-
     <!-- nav -->
     <div class="absolute top-0 left-0 w-full">
         <div class="w-full max-w-6xl mx-auto px-4">

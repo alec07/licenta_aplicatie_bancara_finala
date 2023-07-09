@@ -69,7 +69,7 @@ session_start();
                                 echo "<form method='post' action='includes/get_facturieri.php'>";
                                 echo "<p class='mb-2 text-lg mr-5 text-gray-500 font-bold inline-block'>Nume: </p><input readonly class='mb-2 text-lg mr-5 ' type='text' name='nume' value='" . $row['nume'] . "'><br>";
                                 echo "<p class='mb-2 text-lg mr-5 text-gray-500 font-bold inline-block'>Iban: </p><input readonly class='mb-2 text-lg mr-5 ' type='text' name='iban' value='" . $row['iban'] . "'><br>";
-                                echo "<p class='mb-2 text-lg mr-5 text-gray-500 font-bold inline-block'>Suma: </p><input class='mb-2 text-lg mr-5 ' type='number' name='suma_plata'><br>";
+                                echo "<p class='mb-2 text-lg mr-5 text-gray-500 font-bold inline-block'>Suma: </p><input class='mb-2 text-lg mr-5 ' min='0' type='number' name='suma_plata'><br>";
                                 echo "<p class='mb-2 text-lg mr-5 text-gray-500 font-bold inline-block'>Cod Client: </p><input class='mb-2 text-lg mr-5 ' type='text' name='cod_client'><br>";
                                 echo "<input type='submit' class='mt-10 px-8 py-2 rounded-lg bg-violet-500 text-white' value='Salveaza'>";
                                 echo "</form>";

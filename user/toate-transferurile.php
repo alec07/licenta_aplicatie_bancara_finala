@@ -46,7 +46,7 @@ session_start();
                                 class="border border-gray-300 rounded px-3 py-2">
                             <label for="dataSfarsit" class="mr-2">Data sfârșit:</label>
                             <input type="date" id="dataSfarsit" name="dataSfarsit"
-                                class="border border-gray-300 rounded px-3 py-2">
+                                class="border border-gray-300 rounded px-3 py-2"  max="<?php echo date('Y-m-d'); ?>">
                             <button type="submit" name="filtrare"
                                 class="font-sans font-medium text-sm inline-flex items-center justify-center hover:bg-violet-200 gap-2 h-9 px-6 rounded-full bg-violet-100 text-violet-500 hover:text-violet-600 transition-all duration-300 tw-accessibility">
                                 <svg class="h-4 w-4 text-violet-500" width="24" height="24" viewBox="0 0 24 24"
@@ -100,7 +100,6 @@ session_start();
 
                 </div>
                 <div>
-
                     <label for="checkbox1">
                         <input type="checkbox" id="checkbox1" value="Cheltuială" onchange="adaugaFiltru()">Cheltuială
                     </label>
@@ -124,9 +123,6 @@ session_start();
                         </div>
                     </div>
                 </div>
-
-
-
                 <div class="flex flex-col">
                     <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
@@ -145,9 +141,8 @@ session_start();
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                         <?php
-                                            // Preluăm ID-ul clientului conectat în sesiune
+                                            // iD-ul clientului conectat în sesiune
                                             $id_client = $_SESSION['id_client'];
 
                                             // Construim interogarea de bază
@@ -275,14 +270,13 @@ session_start();
                                                 }
                                             }
 
-                                            // Interogăm baza de date pentru a obține transferurile efectuate de către clientul conectat în sesiune
+                                            // Interoghez baza de date pentru a obține transferurile efectuate de către clientul conectat în sesiune
                                             $result = mysqli_query($conn, $query);
 
-                                            // Verificăm dacă există rezultate
+                                            // Verific dacă există rezultate
                                             if (mysqli_num_rows($result) > 0) {
 
-
-                                                // Parcurgem fiecare rând din rezultat și afișăm detaliile transferurilor
+                                                // Parcurg fiecare rând din rezultat și afișăm detaliile transferurilor
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     echo "<tr class='border-b dark:border-neutral-500'>";
                                                     echo "<td class='whitespace-nowrap px-6 py-4 font-medium'>" . $row['id_transfer'] . "</td>";
@@ -293,16 +287,13 @@ session_start();
                                                     echo "<td class='whitespace-nowrap px-6 py-4'>" . $row["tip_tranzactie"] . "</td>";
                                                     echo "</tr>";
                                                 }
-
                                                 echo "</tbody>";
                                                 echo "</table>";
                                             } else {
-                                                // Afișăm un mesaj dacă nu există rezultate
+                                                // Afișez un mesaj dacă nu există rezultate
                                                 echo 'Nu s-au găsit rezultate.';
                                             }
                                             ?>
-
-
                                     </tbody>
                                 </table>
                             </div>
@@ -340,7 +331,6 @@ function adaugaFiltru() {
         }
     });
 }
-
 
 function exportaTransferuri() {
     // Colecționează rândurile tabelului

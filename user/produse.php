@@ -45,7 +45,7 @@
                                         placeholder=" " required />
                                 </div>
                                 <div class="flex flex-row items-center">
-                                    <label for="suma_depusa"
+                                    <label for="suma_depusa" min="0"
                                         class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 px-2">
                                         Suma:
                                     </label>
@@ -72,13 +72,13 @@
                                         class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 px-2 ">Data
                                         depunere:</label>
                                     <input type="date" name="data_depunere" value="<?php echo date('Y-m-d'); ?>"
-                                        required>
+                                    readonly>
                                 </div>
                                 <div class="flex flex-row items-center mt-2">
                                     <label for="data_expirare"
                                         class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 px-2">
                                         Data expirare:</label>
-                                    <input id="data_expirare" type="date" name="data_expirare" required>
+                                    <input id="data_expirare" type="date" name="data_expirare" readonly>
                                 </div>
 
 

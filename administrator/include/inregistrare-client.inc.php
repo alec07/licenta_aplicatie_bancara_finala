@@ -84,6 +84,18 @@ if(isset($_POST["submit"])){
         header('location:../inregistrare-client.php?error=emptyIBAN');
         exit;
     }
+    $cnp=$_POST['cnp'];
+    $telefon = $_POST['telefon'];
+    $email = $_POST['email'];
+    // Verificare existență număr de telefon sau adresă de email în baza de date
+    $sql = "SELECT * FROM inregistrare_client WHERE telefon = '$telefon' OR email = '$email' OR cnp = '$cnp'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        // Există deja un număr de telefon sau o adresă de email înregistrate în baza de date
+        header('Location: ../inregistrare-client.php?error=ExistaTelefonSauEmail');
+        exit;
+    }
 
     if( !empty($_POST['cnp']) && !empty($_POST['nume']) && !empty($_POST['prenume'])  && !empty($_POST['initiala_t']) && !empty($_POST['telefon']) && !empty($_POST['email']) && !empty($_POST['adresa']) && !empty($_POST['orase']) && !empty($_POST['tara']) && !empty($_POST['data_nastere']) && !empty($_POST['proprietate']) && !empty($_POST['ocupatie']) && !empty($_POST['gen']) && !empty($_POST['suma_depusa']) && !empty($_POST['numar_card']) && !empty($_POST['iban']) && !empty($_POST['data_expirare']) && !empty($_POST['cvv']) && !empty($_POST['data_deschidere']) && !empty($_POST['parola']))
     {
